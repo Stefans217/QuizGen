@@ -1,33 +1,43 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+
+import './styles/App.css'
+
+import Navbar from './components/Navbar/navbar';
+import Home from './pages/Home/home';
+import Landing from './pages/Landing/landing';
+import RegistrationForm from './components/Registration/registration';
+import LoginForm from './components/Login/login';
 
 function App() {
-  const [count, setCount] = useState(0)
+
+  const [showRegistrationModal, setShowRegistrationModal] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
+
+  const openRegistrationModal = () => setShowRegistrationModal(true);
+  const closeRegistrationModal = () => setShowRegistrationModal(false);
+
+  const openLoginModal = () => setShowLoginModal(true);
+  const closeLoginModal = () => setShowLoginModal(false);
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      {showRegistrationModal && <RegistrationForm closeRegistrationModal={closeRegistrationModal}/>}
+      {showRegistrationModal && <div className="backdrop" onClick={closeRegistrationModal}></div>}
+
+      {showLoginModal && <LoginForm closeLoginModal={closeLoginModal}/>}
+      {showLoginModal && <div className='backdrop' onClick={closeLoginModal}></div>}
+
+      <Router>
+        <div>
+          <Navbar openRegistrationModal={openRegistrationModal} openLoginModal={openLoginModal}/>
+
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/upload" element={<Landing />}/>
+          </Routes>
+        </div>
+      </Router>
     </>
   )
 }
