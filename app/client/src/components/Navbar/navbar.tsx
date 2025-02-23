@@ -19,9 +19,7 @@ const Navbar: React.FC<ModalProps> = ({openRegistrationModal, openLoginModal}) =
 
                 <div className='text-sky-500 flex space-x-4'>
                     <Link to="/" className="link">Home</Link>
-                    <Link to="/upload" className="link">Upload</Link>
-                    <Link to="/display" className="link">Display</Link>
-                    
+                    <Link to="/landing" className="link">Landing</Link>
                 </div>
                 <div className='text-flex space-x-4 ml-4'>
                     <button onClick={openLoginModal} className='bg-cyan-800 hover:bg-blue-600 text-white px-2 py-1 rounded-sm focus:outline-none'>Login</button>

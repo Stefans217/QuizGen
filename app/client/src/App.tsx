@@ -34,7 +34,7 @@ function App() {
 
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/upload" element={<Landing />}/>
+            <Route path="/landing" element={<Landing />}/>
           </Routes>
         </div>
       </Router>

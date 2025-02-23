@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { X } from "lucide-react";
-import registration from "./registration.css";
+import "./registration.css";
 
 interface Props {
   closeRegistrationModal: () => void;
@@ -70,8 +70,8 @@ const RegistrationForm: React.FC<Props> = ({ closeRegistrationModal }) => {
           <X />
         </button>
 
-        <p className="text-xl font-semibold mb-10 text-center">Join with CPD</p>
-        <p className="text-center mb-4">Join with</p>
+        <p className="text-xl font-semibold mb-10 text-center">Join with QuizGen</p>
+        {/* <p className="text-center mb-4">Join with</p>
         <div className="mt-7 flex flex-col gap-2">
           <button className="inline-flex h-8 w-full items-center justify-center gap-2 rounded border border-slate-300 bg-white p-2 text-xs font-medium text-black outline-none focus:ring-2 focus:ring-[#333] focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-60">
             <img
@@ -85,13 +85,13 @@ const RegistrationForm: React.FC<Props> = ({ closeRegistrationModal }) => {
         <br />
         <a href="http://www.apple.com" className="text-cyan-500 underline">
           Apple
-        </a>
+        </a> */}
 
-        <div className="flex w-full items-center gap-2 py-6 text-xs text-slate-600">
+        {/* <div className="flex w-full items-center gap-2 py-6 text-xs text-slate-600">
           <div className="h-px w-full bg-slate-200"></div>
           OR
           <div className="h-px w-full bg-slate-200"></div>
-        </div>
+        </div> */}
         {error_emailExists && <p className="text-red-500 text-xs mb-4">{error_emailExists}</p>}
 
         {error_passwordMismatch && <p className="text-red-500 text-xs mb-4">{error_passwordMismatch}</p>}
