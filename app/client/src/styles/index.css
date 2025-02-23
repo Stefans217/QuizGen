@@ -1,5 +1,4 @@
 @import "tailwindcss";
+@import "flowbite/src/themes/default";
 
-body {
-    padding-top: 3rem; /* Adjust for navbar height */
-}
+
