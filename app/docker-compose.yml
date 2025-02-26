@@ -1,0 +1,30 @@
+version: '3.8'
+services:   
+    backend:
+        build:
+            context: ./backend
+        container_name: quizgen-server
+        restart: always
+        ports:
+            - '3001:3001'
+        volumes:
+            - ./backend:/app
+            - server-node_modules:/app/node_modules
+        working_dir: /app
+        command: npx nodemon -L --config nodemon.json
+        env_file:
+            - ./backend/.env
+    client:
+        build:
+            context: client
+        container_name: quizgen-client
+        ports:
+            - "3000:3000"
+        volumes:
+            - ./client:/app
+            - /app/node_modules
+        environment:
+            - CHOKIDAR_USEPOLLING=true
+volumes:
+  server-node_modules:
+  client-node_modules:
