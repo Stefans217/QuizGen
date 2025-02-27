@@ -1,8 +1,8 @@
 {
     "verbose": true,
     "watch": ["src"],
-    "ext": "js, json",
+    "ext": "json, ts",
     "ignore": ["node_modules"],
-    "exec": "npm start"
+    "exec": "tsc && npm start"
 }
   
