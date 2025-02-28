@@ -23,6 +23,11 @@ const RegistrationForm: React.FC<Props> = ({ closeRegistrationModal }) => {
 
   const [error_passwordMismatch, setError_passwordMismatch] = useState('');
   const [error_emailExists, setError_emailExists] = useState('');
+  const [error_invalidPasswordFormat, setError_invalidPasswordFormat] = useState('');
+  
+  //1 uppercase, 1 number, 8 characters
+  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+={}\[\]:;"'<>,.?~`-]?)[a-zA-Z\d!@#$%^&*()_+={}\[\]:;"'<>,.?~`-]{8,}$/;
+  //return passwordRegex.test(unHashedPassword);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -30,6 +35,11 @@ const RegistrationForm: React.FC<Props> = ({ closeRegistrationModal }) => {
     if (password !== confirmPassword) {
         setError_passwordMismatch('Passwords must match');
         return;
+    }
+
+    if(!passwordRegex.test(password)){
+      setError_invalidPasswordFormat('Password must contain at least 1 uppercase letter, 1 lowercase letter, 1 number, and be at least 8 characters long');
+      return;
     }
 
     setError_passwordMismatch('');
@@ -95,6 +105,7 @@ const RegistrationForm: React.FC<Props> = ({ closeRegistrationModal }) => {
         {error_emailExists && <p className="text-red-500 text-xs mb-4">{error_emailExists}</p>}
 
         {error_passwordMismatch && <p className="text-red-500 text-xs mb-4">{error_passwordMismatch}</p>}
+        {error_invalidPasswordFormat && <p className="text-red-500 text-xs mb-4">{error_invalidPasswordFormat}</p>}
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <input
