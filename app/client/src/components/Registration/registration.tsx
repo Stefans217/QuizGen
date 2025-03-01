@@ -21,45 +21,55 @@ const RegistrationForm: React.FC<Props> = ({ closeRegistrationModal }) => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
-  const [error_passwordMismatch, setError_passwordMismatch] = useState('');
-  const [error_emailExists, setError_emailExists] = useState('');
-  const [error_invalidPasswordFormat, setError_invalidPasswordFormat] = useState('');
-  
+  //const [error_passwordMismatch, setError_passwordMismatch] = useState('');
+  //const [error_emailExists, setError_emailExists] = useState('');
+  //const [error_invalidPasswordFormat, setError_invalidPasswordFormat] = useState('');
+  const [errorMessage, setErrorMessage] = useState<React.ReactNode>(null);
+
   //1 uppercase, 1 number, 8 characters
   const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+={}\[\]:;"'<>,.?~`-]?)[a-zA-Z\d!@#$%^&*()_+={}\[\]:;"'<>,.?~`-]{8,}$/;
-  //return passwordRegex.test(unHashedPassword);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (password !== confirmPassword) {
-        setError_passwordMismatch('Passwords must match');
+        setErrorMessage('Passwords must match');
         return;
     }
 
     if(!passwordRegex.test(password)){
-      setError_invalidPasswordFormat('Password must contain at least 1 uppercase letter, 1 lowercase letter, 1 number, and be at least 8 characters long');
+      setErrorMessage(
+        <div className="text-red-600 text-sm">
+          <p>Your password must contain:</p>
+          <ul className="list-disc pl-5">
+            <li>Minimum 8 characters</li>
+            <li>One uppercase letter</li>
+            <li>One lowercase letter</li>
+            <li>One number</li>
+          </ul>
+        </div>
+      );
       return;
     }
 
-    setError_passwordMismatch('');
+    setErrorMessage('');
 
     console.log(email, username, password);
 
     try {
-      const response = await fetch("http://localhost:80/api/register", {
+      const response = await fetch("http://localhost:3001/api/register", {
         method: "POST",
         headers: {
             'Content-Type': 'application/json',
           },
         body: JSON.stringify({email, username, password}),
       });
-
+      
       if (response.ok) {
         console.log("User registration data submitted successfully");
       } else {
         const data = await response.json();
-        setError_emailExists(data.message);
+        setErrorMessage(data.message);
         console.error("Error submitting user registration data");
       }
 
@@ -81,31 +91,9 @@ const RegistrationForm: React.FC<Props> = ({ closeRegistrationModal }) => {
         </button>
 
         <p className="text-xl font-semibold mb-10 text-center">Join with QuizGen</p>
-        {/* <p className="text-center mb-4">Join with</p>
-        <div className="mt-7 flex flex-col gap-2">
-          <button className="inline-flex h-8 w-full items-center justify-center gap-2 rounded border border-slate-300 bg-white p-2 text-xs font-medium text-black outline-none focus:ring-2 focus:ring-[#333] focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-60">
-            <img
-              src="https://www.svgrepo.com/show/475656/google-color.svg"
-              alt="Google"
-              className="h-[18px] w-[18px]"
-            />
-            Continue with Google
-          </button>
-        </div>
-        <br />
-        <a href="http://www.apple.com" className="text-cyan-500 underline">
-          Apple
-        </a> */}
 
-        {/* <div className="flex w-full items-center gap-2 py-6 text-xs text-slate-600">
-          <div className="h-px w-full bg-slate-200"></div>
-          OR
-          <div className="h-px w-full bg-slate-200"></div>
-        </div> */}
-        {error_emailExists && <p className="text-red-500 text-xs mb-4">{error_emailExists}</p>}
-
-        {error_passwordMismatch && <p className="text-red-500 text-xs mb-4">{error_passwordMismatch}</p>}
-        {error_invalidPasswordFormat && <p className="text-red-500 text-xs mb-4">{error_invalidPasswordFormat}</p>}
+        {errorMessage && <p className="text-red-500 text-xs mb-4">{errorMessage}</p>}
+        
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <input
