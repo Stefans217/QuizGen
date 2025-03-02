@@ -1,7 +1,12 @@
-import express, { Request, Response } from "express";
+import { Request, Response } from "express";
+import * as express from 'express';
 import prisma from "../../client.js";
 import bcrypt from "bcrypt";
-import { body, validationResult } from "express-validator";
+import { body, validationResult } from 'express-validator';
+
+// import expressValidator = require("express-validator");
+// const body = expressValidator;
+// const validationResult = expressValidator;
 
 const router = express.Router();
 
@@ -12,6 +17,8 @@ router.post("/userupload",
     body("password").isLength({ min: 8 }).withMessage("Password must be at least 8 characters long"),
   ],
   async (req: Request, res: Response) => {
+
+    console.log("request received");
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -53,3 +60,5 @@ router.post("/userupload",
         res.status(400).json({ error: "Username already exists" });
     }
 });
+
+export default router;

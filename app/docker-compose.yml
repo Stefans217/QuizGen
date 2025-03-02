@@ -9,7 +9,7 @@ services:
             - "3001:3001"
         volumes:
             - ./backend:/app
-            - server-node_modules:/app/node_modules
+            - /app/node_modules
         working_dir: /app
         command: npx nodemon -L --config nodemon.json
         env_file:

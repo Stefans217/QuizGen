@@ -57,7 +57,7 @@ const RegistrationForm: React.FC<Props> = ({ closeRegistrationModal }) => {
     console.log(email, username, password);
 
     try {
-      const response = await fetch("http://localhost:3001/api/register", {
+      const response = await fetch("http://localhost:3001/api/registration/userupload", {
         method: "POST",
         headers: {
             'Content-Type': 'application/json',
