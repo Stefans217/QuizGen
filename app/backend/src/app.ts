@@ -1,10 +1,15 @@
 import express, { Application, Request, Response } from 'express';
 import cors from 'cors';
+import bodyParser from 'body-parser';
 
 import uploadUser from './routes/registration/uploadUser';
+import verifyLogin from './routes/login/verifyLogin';
 
 const app: Application = express();
 const port: number = 3001;
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(cors({
   origin: 'http://localhost:3000', // Only allow requests from this origin
@@ -13,6 +18,7 @@ app.use(cors({
 }));
 
 app.use('/api/registration', uploadUser);
+app.use('/api/login', verifyLogin);
 
 app.get('/', (req: Request, res: Response) => {
   res.send('Hello World with TypeScript!');

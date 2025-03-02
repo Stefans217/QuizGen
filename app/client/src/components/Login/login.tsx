@@ -1,6 +1,8 @@
 import React, {useEffect, useRef, useState} from 'react';
 import { X } from "lucide-react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { login } from '../../services/login/loginService';
 
 interface Props {
     closeLoginModal: () => void;
@@ -14,6 +16,7 @@ const LoginForm: React.FC<Props> = ({closeLoginModal}) => {
     const [email, setEmail] = useState("");
     //const [showPassword, setShowPassword] = useState(false);
 
+    //const navigate = useNavigate(); // Initialize navigate function
     const modalRef = useRef<HTMLDivElement | null>(null);
    
     const closeModal = (e: React.MouseEvent<HTMLElement>) => {
@@ -30,15 +33,13 @@ const LoginForm: React.FC<Props> = ({closeLoginModal}) => {
     };
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
         console.log("submit clicked");
         setLoading(true);
         setError("");
 
         try {
-            console.log(email, password);
-            const res = await axios.post("http://localhost:3001/api/login", { email, password });
-            localStorage.setItem("token", res.data.token);
-            alert("Login successful!");
+            await login(email, password);
           } catch (error) {
             console.log("Login failed:", error);
             //alert("Invalid credentials");

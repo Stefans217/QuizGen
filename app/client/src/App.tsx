@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './styles/App.css'
 
 import Navbar from './components/Navbar/navbar';
-import Home from './pages/Home/home';
+import Interface from './pages/Interface/interface';
 import Landing from './pages/Landing/landing';
 import RegistrationForm from './components/Registration/registration';
 import LoginForm from './components/Login/login';
@@ -33,7 +33,7 @@ function App() {
           <Navbar openRegistrationModal={openRegistrationModal} openLoginModal={openLoginModal}/>
 
           <Routes>
-            <Route path="/" element={<Home />} />
+            <Route path="/interface" element={<Interface />} />
             <Route path="/landing" element={<Landing />}/>
           </Routes>
         </div>

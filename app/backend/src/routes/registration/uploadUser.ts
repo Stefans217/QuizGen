@@ -3,6 +3,8 @@ import * as express from 'express';
 import prisma from "../../client.js";
 import bcrypt from "bcrypt";
 import { body, validationResult } from 'express-validator';
+import { validateEmail, validatePassword } from "./validatePassword.js"; // Import validators
+
 
 // import expressValidator = require("express-validator");
 // const body = expressValidator;
@@ -11,25 +13,28 @@ import { body, validationResult } from 'express-validator';
 const router = express.Router();
 
 router.post("/userupload",   
-  [
-    body("email").isEmail().withMessage("Invalid email format"),
-    body("email").normalizeEmail(),
-    body("password").isLength({ min: 8 }).withMessage("Password must be at least 8 characters long"),
-  ],
+  [validateEmail, validatePassword],
   async (req: Request, res: Response) => {
 
+    const { email, password } = req.body;
+    console.log("Request body:", { email, password });
+
     console.log("request received");
+  
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
+      console.log("Validation errors:", errors.array());
       res.status(400).json({ errors: errors.array() });
       return;
     }
 
-    const { email, password } = req.body;
+
 
     try {
         //find existing user
+        console.log("Checking for existing user with email:", email);
+
         const existingUser = await prisma.user.findUnique({
             where: { email },
             select: {
@@ -40,21 +45,28 @@ router.post("/userupload",
 
         //if user exists, return error
         if (existingUser) {
+          console.log("User already exists:", existingUser);
+
             res.status(409).json({ message: "email exists" });
             return;
         }
         //hash password
+        console.log("Hashing password");
         const saltRounds = 10;
         const hashedPassword = await bcrypt.hash(password, saltRounds);
 
         //create new user
+        console.log("Creating new user with email:", email);
+
         const user = await prisma.user.create({
             data: { email, password: hashedPassword },
             select: { id: true, email: true },
         });
 
         //return user created confirmation
-        res.json({ message: "User registered", user });
+        console.log("User created successfully:", user);
+
+        res.status(200).json({ message: "User registered", user });
     } catch (error) {
         //return error if user already exists
         res.status(400).json({ error: "Username already exists" });

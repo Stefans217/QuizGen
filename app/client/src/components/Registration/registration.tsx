@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { X } from "lucide-react";
 import "./registration.css";
+import { login } from "../../services/login/loginService";
 
 interface Props {
   closeRegistrationModal: () => void;
@@ -54,7 +55,7 @@ const RegistrationForm: React.FC<Props> = ({ closeRegistrationModal }) => {
 
     setErrorMessage('');
 
-    console.log(email, username, password);
+    console.log(JSON.stringify({email, username, password}));
 
     try {
       const response = await fetch("http://localhost:3001/api/registration/userupload", {
@@ -67,6 +68,8 @@ const RegistrationForm: React.FC<Props> = ({ closeRegistrationModal }) => {
       
       if (response.ok) {
         console.log("User registration data submitted successfully");
+
+        await login(email, password);
       } else {
         const data = await response.json();
         setErrorMessage(data.message);
