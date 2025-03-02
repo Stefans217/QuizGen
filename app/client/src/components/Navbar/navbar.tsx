@@ -56,13 +56,13 @@ const Navbar: React.FC<ModalProps> = ({ openRegistrationModal, openLoginModal })
                         </li>
                         <li>
                             <Link
-                                to="/landing"
+                                to="/content"
                                 className={`block py-2 px-3 rounded-sm md:p-0 ${
-                                    location.pathname === "/landing" ? "text-white bg-blue-700 md:bg-transparent md:text-blue-700 dark:text-white md:dark:text-blue-500" : "text-gray-900 hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                                    location.pathname === "/content" ? "text-white bg-blue-700 md:bg-transparent md:text-blue-700 dark:text-white md:dark:text-blue-500" : "text-gray-900 hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
                                 }`}
-                                aria-current={location.pathname === "/landing" ? "page" : undefined}
+                                aria-current={location.pathname === "/content" ? "page" : undefined}
                             >
-                                Landing
+                                Content
                             </Link>
                         </li>
                         {!isLoggedIn ? (
