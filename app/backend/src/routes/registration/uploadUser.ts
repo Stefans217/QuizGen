@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
 import * as express from 'express';
-import prisma from "../../client.js";
+import prisma from "../../client";
 import bcrypt from "bcrypt";
 import { body, validationResult } from 'express-validator';
-import { validateEmail, validatePassword } from "./validatePassword.js"; // Import validators
+import { validateEmail, validatePassword } from "./validatePassword"; // Import validators
 
 
 // import expressValidator = require("express-validator");
@@ -45,7 +45,7 @@ router.post("/userupload",
 
         //if user exists, return error
         if (existingUser) {
-          console.log("User already exists:", existingUser);
+            console.log("User already exists:", existingUser);
 
             res.status(409).json({ message: "email exists" });
             return;
@@ -69,7 +69,7 @@ router.post("/userupload",
         res.status(200).json({ message: "User registered", user });
     } catch (error) {
         //return error if user already exists
-        res.status(400).json({ error: "Username already exists" });
+        res.status(400).json({ error: "email already exists" });
     }
 });
 
