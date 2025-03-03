@@ -2,12 +2,14 @@ FROM node:22.3.0
 
 WORKDIR /app
 
-COPY package.json /app/package.json
-COPY package-lock.json /app/package-lock.json
+COPY ./package.json .
+COPY ./package-lock.json .
 
 RUN npm install
 
-COPY . /app 
+COPY . .
+
+RUN npx prisma generate --schema=./prisma/schema.prisma
 
 EXPOSE 3001
 
