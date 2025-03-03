@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
-import prisma from '../../client.js';
+import prisma from '../../client';
 import jwt from 'jsonwebtoken';
 import dotenv from "dotenv";
 
