@@ -101,7 +101,7 @@ const Home: React.FC = () => {
                   <SelectTrigger>
                     <SelectValue placeholder="Select a Question Type" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className='bg-white shadow-lg rounded-lg'>
                     <SelectItem value="multiple-choice">Multiple Choice</SelectItem>
                     <SelectItem value="true-false">True/False</SelectItem>
                     <SelectItem value="short-answer">Short Answer</SelectItem>
