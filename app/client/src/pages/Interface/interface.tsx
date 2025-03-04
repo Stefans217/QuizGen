@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Label } from "@/components/ui/label"
 import { Upload } from "lucide-react"
+import { cn } from "@/lib/utils"
 
 interface Question {
   id: number
@@ -17,6 +18,8 @@ interface Question {
   prompt: string
   difficulty: number
 }
+
+
 
 const Home: React.FC = () => {
   const [masterPrompt, setMasterPrompt] = useState("")
@@ -52,12 +55,15 @@ const Home: React.FC = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
         <div className="space-y-2">
           <h2 className="text-lg font-medium">Master Prompt</h2>
-          <Textarea
-            placeholder="Enter general details about your quiz (ie. subject, key concepts, etc.)"
-            className="min-h-[120px]"
-            value={masterPrompt}
-            onChange={(e) => setMasterPrompt(e.target.value)}
-          />
+          <div className='className="min-h-[120px]"'>
+            <Textarea
+              placeholder="Enter general details about your quiz (ie. subject, key concepts, etc.)"
+              
+              value={masterPrompt}
+              onChange={(e) => setMasterPrompt(e.target.value)}
+            />
+          </div>
+
         </div>
         <div className="space-y-2">
           <h2 className="text-lg font-medium">Input a PDF</h2>
@@ -73,14 +79,15 @@ const Home: React.FC = () => {
       <div className="mb-8">
         <div className="flex flex-col items-center gap-2">
           <h2 className="text-lg font-medium">Number of Questions</h2>
-          <Input
-            type="number"
-            min="1"
-            max="20"
-            value={numQuestions}
-            onChange={handleNumQuestionsChange}
-            className="w-32 text-center"
-          />
+          <div className="w-32 text-center">
+            <Input
+              type="number"
+              min="1"
+              max="20"
+              value={numQuestions}
+              onChange={handleNumQuestionsChange}
+            />
+          </div>
         </div>
       </div>
 
@@ -108,11 +115,13 @@ const Home: React.FC = () => {
                     <SelectItem value="essay">Essay</SelectItem>
                   </SelectContent>
                 </Select>
-                <Textarea
-                  placeholder="Enter your Prompt"
-                  value={question.prompt}
-                  onChange={(e) => handleQuestionChange(question.id, "prompt", e.target.value)}
-                />
+                <div className=''>
+                  <Textarea
+                    placeholder="Enter your Prompt"
+                    value={question.prompt}
+                    onChange={(e) => handleQuestionChange(question.id, "prompt", e.target.value)}
+                  />
+                </div>
               </div>
             </div>
             <div className="flex items-center gap-4 mt-4">
@@ -121,10 +130,10 @@ const Home: React.FC = () => {
                 <Slider
                   value={[question.difficulty]}
                   min={0}
-                  max={100}
+                  max={3}
                   step={1}
                   onValueChange={(value) => handleQuestionChange(question.id, "difficulty", value[0])}
-                  className="w-full"
+                  className={cn("w-[15%]", "custom-slider")}
                 />
               </div>
             </div>
@@ -133,7 +142,7 @@ const Home: React.FC = () => {
       </div>
 
       <div className="mt-8 flex justify-center">
-        <Button className="px-8">Generate Quiz</Button>
+        <Button className="px-8" variant="default">Generate Quiz</Button>
       </div>
     </div>
   )

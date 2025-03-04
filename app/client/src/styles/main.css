@@ -1,0 +1,93 @@
+@import "tailwindcss";
+@import "flowbite/src/themes/default";
+
+@tailwind utilities;
+
+@plugin 'tailwindcss-animate';
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+    --radius: 00.4rem;
+    --border: 213 31% 89%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 196 100% 47%;
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --primary: 196 100% 47%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+}
+
+.dark {
+    --background: 10 10 35;
+    --foreground: 250 252 255;
+    --card: 10 10 35;
+    --card-foreground: 250 252 255;
+    --popover: 10 10 35;
+    --popover-foreground: 250 252 255;
+    --primary: 0 149 238;
+    --primary-foreground: 25 30 45;
+    --secondary: 30 35 50;
+    --secondary-foreground: 250 252 255;
+    --muted: 30 35 50;
+    --muted-foreground: 160 170 190;
+    --accent: 30 35 50;
+    --accent-foreground: 250 252 255;
+    --destructive: 180 40 40;
+    --destructive-foreground: 250 252 255;
+    --border: 30 35 50;
+    --input: 30 35 50;
+    --ring: 0 149 238;
+}
+
+@theme inline {
+    --border: var(--border);
+    --input: var(--input);
+    --ring: var(--ring);
+    --background: var(--background);
+    --foreground: var(--foreground);    
+    --primary: var(--primary);
+    --primary-foreground: var(--primary-foreground);
+    --secondary: var(--secondary);
+    --secondary-foreground: var(--secondary-foreground);
+    --destructive: var(--destructive);
+    --destructive-foreground: var(--destructive-foreground);
+    --muted: var(--muted);
+    --muted-foreground: var(--muted-foreground);
+    --accent: var(--accent);
+    --accent-foreground: var(--accent-foreground);
+    --popover: var(--popover);
+    --popover-foreground: var(--popover-foreground);    
+    --card: var(--card);
+    --card-foreground: var(--card-foreground);
+}
+
+/* Rounded utilities */
+@layer utilities {
+    .rounded-lg {
+        border-radius: var(--radius);
+    }
+    .rounded-md {
+        border-radius: calc(var(--radius) - 2px);
+    }
+    .rounded-sm {
+        border-radius: calc(var(--radius) - 4px);
+    }
+    .custom-slider .shadcn-slider-track {
+        background-color: black;
+    }
+    
+}
+
