@@ -28,6 +28,7 @@
     --popover-foreground: 222.2 84% 4.9%;
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
+    --bg-muted: 0 0% 0%;
 }
 
 .dark {
@@ -72,6 +73,7 @@
     --popover-foreground: var(--popover-foreground);    
     --card: var(--card);
     --card-foreground: var(--card-foreground);
+    --bg-muted: (var(--bg-muted));
 }
 
 /* Rounded utilities */

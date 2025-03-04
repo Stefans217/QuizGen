@@ -50,6 +50,11 @@ const Home: React.FC = () => {
     }
   }
 
+  function handleSubmit(){
+    console.log("form submitted");
+    return;
+  }
+
   return (
     <div className="container mx-auto py-8 px-4 max-w-4xl">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
@@ -133,7 +138,7 @@ const Home: React.FC = () => {
                   max={3}
                   step={1}
                   onValueChange={(value) => handleQuestionChange(question.id, "difficulty", value[0])}
-                  className={cn("w-[15%]", "custom-slider")}
+                  className='w-[20%]'
                 />
               </div>
             </div>
@@ -142,7 +147,7 @@ const Home: React.FC = () => {
       </div>
 
       <div className="mt-8 flex justify-center">
-        <Button className="px-8" variant="default">Generate Quiz</Button>
+        <Button className="px-8" variant="default" onClick={handleSubmit}>Generate Quiz</Button>
       </div>
     </div>
   )
