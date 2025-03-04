@@ -33,7 +33,7 @@ function App() {
           <Navbar openRegistrationModal={openRegistrationModal} openLoginModal={openLoginModal}/>
 
           <Routes>
-            <Route path="/interface" element={<Interface />} />
+            <Route path="/" element={<Interface />} />
             <Route path="/content" element={<Content />}/>
           </Routes>
         </div>
