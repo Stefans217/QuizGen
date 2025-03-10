@@ -3,7 +3,7 @@ import OpenAI from "openai";
 async function main() {
     const openai = new OpenAI();
     const completion = await openai.chat.completions.create({
-        model: "gpt-4o-mini",
+        model: "gpt-o3-mini",
         messages: [
             { role: "system", content: "You are a helpful assistant." },
             {

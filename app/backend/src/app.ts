@@ -5,8 +5,6 @@ import bodyParser from 'body-parser';
 import uploadUser from './routes/registration/uploadUser';
 import verifyLogin from './routes/login/verifyLogin';
 
-import OpenAI from "openai";
-
 const app: Application = express();
 const port: number = 3001;
 
@@ -21,27 +19,6 @@ app.use(cors({
 
 app.use('/api/registration', uploadUser);
 app.use('/api/login', verifyLogin);
-
-
-
-async function main() {
-    const openai = new OpenAI();
-    const completion = await openai.chat.completions.create({
-        model: "gpt-4o-mini",
-        messages: [
-            { role: "system", content: "You are a helpful assistant." },
-            {
-                role: "user",
-                content: "Write a haiku about recursion in programming.",
-            },
-        ],
-        store: true,
-    });
-
-    console.log(completion.choices[0].message);
-}
-
-main();
 
 
 app.get('/', (req: Request, res: Response) => {
