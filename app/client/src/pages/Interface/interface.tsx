@@ -22,12 +22,8 @@ interface Question {
 
 const Home: React.FC = () => {
   const [masterPrompt, setMasterPrompt] = useState("")
-  const [numQuestions, setNumQuestions] = useState(3)
-  const [questions, setQuestions] = useState<Question[]>([
-    { id: 1, type: "", prompt: "", difficulty: 50 },
-    { id: 2, type: "", prompt: "", difficulty: 50 },
-    { id: 3, type: "", prompt: "", difficulty: 50 },
-  ])
+  const [numQuestions, setNumQuestions] = useState(0)
+  const [questions, setQuestions] = useState<Question[]>([])
 
   const handleQuestionChange = (id: number, field: keyof Question, value: string | number) => {
     setQuestions(questions.map((q) => (q.id === id ? { ...q, [field]: value } : q)))
@@ -35,6 +31,7 @@ const Home: React.FC = () => {
 
   const handleNumQuestionsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const num = Number.parseInt(e.target.value) || 0
+
     setNumQuestions(num)
 
     // Add or remove questions based on the new number
