@@ -20,6 +20,7 @@
 
 
 import express, { Request, Response } from 'express';
+import { generateQuiz } from '@/utils/generateQuiz';
 
 const router = express.Router();
 
@@ -34,10 +35,14 @@ router.post('/generateQuiz', async (req: Request, res: Response) => {
         }
 
         // Implement quiz generation logic here
+        const responseXML = generateQuiz(masterPrompt, questionData);
+        console.log(responseXML);
 
-        
+        res.status(200).json({ message: 'Quiz generated successfully.' });
+        return;
     } catch (error) {
-        res.status(500).json({ message: 'Internal server error.' });
+        res.status(500).json({ message: 'Internal server error in the /generateQuiz API route.' });
+        return;
     }
 
 });
