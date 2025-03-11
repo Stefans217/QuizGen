@@ -14,8 +14,6 @@ import { submitQuizDetails } from '@/services/quiz/submitQuizDetails';
 import { Question } from '@/types/question';
 
 
-
-
 const Home: React.FC = () => {
   const [masterPrompt, setMasterPrompt] = useState("")
   const [numQuestions, setNumQuestions] = useState(0)

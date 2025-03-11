@@ -1,7 +1,7 @@
 import axios from "axios";
+import { Question } from "@/types/question";
 
-
-export async function submitQuizDetails(masterPrompt: string, numQuestions: number, questions: Array<{ prompt: string, type: string, difficulty: number }>) {
+export async function submitQuizDetails(masterPrompt: string, numQuestions: number, questions: Array<Question>) {
   try {
 
     const response = await axios.post("http://localhost:3001/api/quiz/generateQuiz", {
