@@ -4,6 +4,7 @@ import bodyParser from 'body-parser';
 
 import uploadUser from './routes/registration/uploadUser';
 import verifyLogin from './routes/login/verifyLogin';
+import generateQuiz from './routes/openai/generateQuizEntry';
 
 const app: Application = express();
 const port: number = 3001;
@@ -19,7 +20,7 @@ app.use(cors({
 
 app.use('/api/registration', uploadUser);
 app.use('/api/login', verifyLogin);
-
+app.use('/api/quiz', generateQuiz);
 
 app.get('/', (req: Request, res: Response) => {
   res.send('Hello World with TypeScript!');

@@ -10,13 +10,9 @@ import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Label } from "@/components/ui/label"
 import { Upload } from "lucide-react"
+import { submitQuizDetails } from '@/services/quiz/submitQuizDetails';
+import { Question } from '@/types/question';
 
-interface Question {
-  id: number
-  type: string
-  prompt: string
-  difficulty: number
-}
 
 
 
@@ -47,7 +43,7 @@ const Home: React.FC = () => {
   }
 
   function handleSubmit(){
-    console.log("form submitted");
+    submitQuizDetails(masterPrompt, numQuestions, questions);
     return;
   }
 
