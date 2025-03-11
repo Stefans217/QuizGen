@@ -20,7 +20,7 @@
 
 
 import express, { Request, Response } from 'express';
-import { generateQuiz } from '@/utils/generateQuiz';
+import { generateQuiz } from '../../utils/generateQuiz';
 
 const router = express.Router();
 
@@ -28,6 +28,8 @@ router.post('/generateQuiz', async (req: Request, res: Response) => {
     try {
 
         const { masterPrompt, numQuestions, questionData } = req.body;
+
+        console.log(masterPrompt, numQuestions, questionData);
 
         if(!masterPrompt || !numQuestions || !questionData) {
             res.status(400).json({ message: 'Master prompt, number of questions, and question data are required.' });
