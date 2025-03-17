@@ -1,4 +1,7 @@
 import OpenAI from 'openai';
+import { manifest } from '@/qti-templates/imsmanifest';
+import { choiceInteraction } from '../qti-templates/choiceInteraction';
+import { extendedTextInteraction } from '@/qti-templates/extendedText';
 
 function createSystemPrompt(){
     return `
@@ -12,29 +15,43 @@ function createSystemPrompt(){
 
         Format:
         - Provide "<assessmentItem>" elements inside an "<assessmentTest>" wrapper.
-        - Include "<choiceInteraction>" for multiple-choice, "<extendedTextInteraction>" for short answers, and "<matchInteraction>" for matching questions.
+        - Include "<choiceInteraction>" for multiple-choice, "<extendedTextInteraction>" for shortand long answers, and "<matchInteraction>" for matching questions.
         - Ensure "<responseDeclaration>", "<itemBody>", and "<responseProcessing>" are correctly structured.
 
         Be concise but detailed. Always follow QTI 2.2 standards.
     `;
 }
 
-function createUserPrompt(masterPrompt: string, questionData: Array<{ subPrompt: string, questionType: string, difficulty: number }>) {
+function createUserPrompt(masterPrompt: string, questions: Array<{ prompt: string, type: string, difficulty: number }>) {
     return `
         Based on this user prompt: ${masterPrompt}
 
+        Use the following templates to generate the questions:
+        - Manifest file: ${manifest()}
+        - For multiple-choice and true/false questions: ${choiceInteraction()}
+        - For extended text questions: ${extendedTextInteraction()}
+        The templates include placeholders marked by astrixes for question content and response options.
+
+        In the manifest file, replace "*file*" with a unique identifier and "*file.xml*" with the name of the XML file.
+        Each question generated will be contained in a separate XML file. 
+        Mark the file name with a unique identifier and separate the questions with a line break and a unique identifier ("NEW - 2").
+
         Generate a QTI 2.2 quiz with the following questions:
-        ${questionData.map((qd) => `Question number: ${qd}. ${qd.questionType} question on ${qd.subPrompt} with a diffuculty of ${qd.difficulty} out of 3.`).join("\n")}
+        ${questions.map((qd, index) => `Question number: ${index + 1}. ${qd.type} question on ${qd.prompt} with a diffuculty of ${qd.difficulty} out of 3.`).join("\n")}
 
         Validate the XML structure before responding.
     `
 }
 
-export async function generateQuiz(masterPrompt: string, questionData: Array<{ subPrompt: string, questionType: string, difficulty: number }>) {
+export async function generateQuiz(masterPrompt: string, questionData: Array<{ prompt: string, type: string, difficulty: number }>) {
     try {
+
+        console.log(questionData);
 
         const systemPrompt = createSystemPrompt();
         const userPrompt = createUserPrompt(masterPrompt, questionData);
+
+        console.log(userPrompt);
 
         const openai = new OpenAI();
         const messages = [
@@ -50,13 +67,13 @@ export async function generateQuiz(masterPrompt: string, questionData: Array<{ s
 
         //send the messages to the OpenAI API
         const response = await openai.chat.completions.create({
-            model: "gpt-o3-mini",
+            model: "o3-mini",
             messages: typedMessages,
             store: false,
         });
 
         //return the raw response from the API
-        return response.choices[0]?.message || "";
+        return response.choices[0]?.message?.content || "";
     } catch (error) {
         console.error(error);
         return `quiz generation error: ${error}. \n\n Check ./backend/src/utils/generateQuiz.ts for context.`;

@@ -32,7 +32,7 @@ const Home: React.FC = () => {
     if (num > questions.length) {
       const newQuestions = [...questions]
       for (let i = questions.length + 1; i <= num; i++) {
-        newQuestions.push({ id: i, type: "", prompt: "", difficulty: 50 })
+        newQuestions.push({ id: i, type: "", prompt: "", difficulty: 3 })
       }
       setQuestions(newQuestions)
     } else if (num < questions.length) {

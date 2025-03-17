@@ -10,6 +10,7 @@ export async function submitQuizDetails(masterPrompt: string, numQuestions: numb
       numQuestions,
       questions
     });
+    console.log(response.data);
 
     return response.data;
   } catch (error) {

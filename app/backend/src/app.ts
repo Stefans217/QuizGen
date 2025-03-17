@@ -4,7 +4,7 @@ import bodyParser from 'body-parser';
 
 import uploadUser from './routes/registration/uploadUser';
 import verifyLogin from './routes/login/verifyLogin';
-import generateQuiz from './routes/openai/generateQuizEntry';
+import generateQuiz from './routes/quiz/generateQuizEntry';
 
 const app: Application = express();
 const port: number = 3001;

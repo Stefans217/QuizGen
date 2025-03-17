@@ -20,24 +20,22 @@
 
 
 import express, { Request, Response } from 'express';
-import { generateQuiz } from '../../utils/generateQuiz';
+import { generateQuiz } from '../../utils/aiResponse';
 
 const router = express.Router();
 
 router.post('/generateQuiz', async (req: Request, res: Response) => {
     try {
 
-        const { masterPrompt, numQuestions, questionData } = req.body;
+        const { masterPrompt, numQuestions, questions } = req.body;
 
-        console.log(masterPrompt, numQuestions, questionData);
-
-        if(!masterPrompt || !numQuestions || !questionData) {
+        if(!masterPrompt || !numQuestions || !questions) {
             res.status(400).json({ message: 'Master prompt, number of questions, and question data are required.' });
             return;
         }
 
         // Implement quiz generation logic here
-        const responseXML = generateQuiz(masterPrompt, questionData);
+        const responseXML = await generateQuiz(masterPrompt, questions);
         console.log(responseXML);
 
         res.status(200).json({ message: 'Quiz generated successfully.' });
