@@ -4,8 +4,8 @@ import { v4 as uuidv4 } from 'uuid';
 import { manifest } from '../qti-templates/imsmanifest';
 import { choiceInteraction } from '../qti-templates/choiceInteraction';
 import { extendedTextInteraction } from '../qti-templates/extendedText';
-import { parseAiResponse } from './responseParser';
-import { writeQuizFiles } from './fileWriter';
+import { parseAiResponse } from '../utils/responseParser';
+import { writeQuizFiles, zipQuizFiles } from '../utils/fileWriter';
 
 
 function createSystemPrompt(){
@@ -38,6 +38,8 @@ function createUserPrompt(masterPrompt: string, questions: Array<{ prompt: strin
         The templates include placeholders marked by astrixes for question content and response options.
 
         In the manifest file, replace "*file*" with a unique identifier and "*file.xml*" with the name of the XML file.
+        For multiple-choice questions, decide how many options to include based on the question type and difficulty.
+        For true or false questions, only include two options.
         Each question generated will be contained in a separate XML file. 
         Mark the file name with a unique identifier and separate the questions with a line break and a unique identifier ("---").
 
@@ -83,9 +85,11 @@ export async function generateQuiz(masterPrompt: string, questionData: Array<{ p
 
         const quizId = uuidv4();
 
-        const baseDier = path.join(process.cwd(), "quizzes");
+        const baseDir = path.join(process.cwd(), "quizzes");
 
-        const fileResult = await writeQuizFiles(parsedResponse, baseDier, quizId);
+        const fileResult = await writeQuizFiles(parsedResponse, baseDir, quizId);
+
+        const zipPath = await zipQuizFiles(fileResult);
 
         //return the raw response from the API
         return {
@@ -93,7 +97,8 @@ export async function generateQuiz(masterPrompt: string, questionData: Array<{ p
             manifestPath: fileResult.manifestPath,
             questionPaths: fileResult.questionPaths,
             quizId,
-            quizDirectory: fileResult.quizDirectory
+            quizDirectory: fileResult.quizDirectory,
+            zipPath
         };
     } catch (error) {
         console.error(error);

@@ -13,6 +13,7 @@
   "license": "ISC",
   "dependencies": {
     "@prisma/client": "^6.4.1",
+    "archiver": "^7.0.1",
     "bcrypt": "^5.1.1",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
@@ -29,6 +30,7 @@
     "@babel/preset-env": "^7.26.9",
     "@babel/preset-typescript": "^7.26.0",
     "@jest/globals": "^29.7.0",
+    "@types/archiver": "^6.0.3",
     "@types/bcrypt": "^5.0.2",
     "@types/cors": "^2.8.17",
     "@types/dotenv": "^6.1.1",
