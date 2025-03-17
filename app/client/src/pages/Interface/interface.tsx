@@ -1,7 +1,8 @@
 "use client"
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import './interface.css';
+import { fetchUserData } from '@/services/user/userService';
 import { Textarea } from "@/components/ui/textarea";
 import { useState } from "react"
 import { Slider } from "@/components/ui/slider"
@@ -18,6 +19,15 @@ const Home: React.FC = () => {
   const [masterPrompt, setMasterPrompt] = useState("")
   const [numQuestions, setNumQuestions] = useState(0)
   const [questions, setQuestions] = useState<Question[]>([])
+  const [userId, setUserId] = useState("")
+
+  useEffect(() => {
+    fetchUserData(localStorage.getItem('token') || "")
+      .then(userData => {
+        setUserId(userData.id);
+      })
+      .catch(err => console.error("Failed to fetch user data:", err));
+  }, []);
 
   const handleQuestionChange = (id: number, field: keyof Question, value: string | number) => {
     setQuestions(questions.map((q) => (q.id === id ? { ...q, [field]: value } : q)))
@@ -41,9 +51,11 @@ const Home: React.FC = () => {
   }
 
   function handleSubmit(){
-    submitQuizDetails(masterPrompt, numQuestions, questions);
+    submitQuizDetails(userId, masterPrompt, numQuestions, questions);
     return;
   }
+
+
 
   return (
     <div className="container mx-auto py-8 px-4 max-w-4xl">

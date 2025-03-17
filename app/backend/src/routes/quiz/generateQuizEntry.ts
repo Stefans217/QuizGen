@@ -27,8 +27,13 @@ const router = express.Router();
 router.post('/generateQuiz', async (req: Request, res: Response) => {
     try {
 
-        const { masterPrompt, numQuestions, questions } = req.body;
+        const { userId, masterPrompt, numQuestions, questions } = req.body;
 
+
+        if(!userId) {
+            res.status(400).json({ message: 'User ID is required.' });
+            return;
+        }
         if(!masterPrompt || !numQuestions || !questions) {
             res.status(400).json({ message: 'Master prompt, number of questions, and question data are required.' });
             return;

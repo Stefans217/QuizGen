@@ -4,6 +4,7 @@ import bodyParser from 'body-parser';
 
 import uploadUser from './routes/registration/uploadUser';
 import verifyLogin from './routes/login/verifyLogin';
+import fetchUserData from './routes/user/fetchUserData';
 import generateQuiz from './routes/quiz/generateQuizEntry';
 
 const app: Application = express();
@@ -20,6 +21,7 @@ app.use(cors({
 
 app.use('/api/registration', uploadUser);
 app.use('/api/login', verifyLogin);
+app.use('/api/user', fetchUserData);
 app.use('/api/quiz', generateQuiz);
 
 app.get('/', (req: Request, res: Response) => {
