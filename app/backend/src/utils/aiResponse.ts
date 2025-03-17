@@ -1,7 +1,12 @@
 import OpenAI from 'openai';
-import { manifest } from '@/qti-templates/imsmanifest';
+import path from 'path';
+import { v4 as uuidv4 } from 'uuid';
+import { manifest } from '../qti-templates/imsmanifest';
 import { choiceInteraction } from '../qti-templates/choiceInteraction';
-import { extendedTextInteraction } from '@/qti-templates/extendedText';
+import { extendedTextInteraction } from '../qti-templates/extendedText';
+import { parseAiResponse } from './responseParser';
+import { writeQuizFiles } from './fileWriter';
+
 
 function createSystemPrompt(){
     return `
@@ -10,12 +15,12 @@ function createSystemPrompt(){
         Your role:
         - Accept user input specifying topics, difficulty, question types, and number of questions.
         - Generate well-formatted QTI 2.2 XML output.
-        - Include metadata such as correct responses, feedback, and scoring.
+        - Include very minimal metadata. Only include the minimum required for a valid QTI 2.2 file.
         - Validate XML structure before responding.
 
         Format:
-        - Provide "<assessmentItem>" elements inside an "<assessmentTest>" wrapper.
-        - Include "<choiceInteraction>" for multiple-choice, "<extendedTextInteraction>" for shortand long answers, and "<matchInteraction>" for matching questions.
+        - Provide only "<assessmentItem>" elements. Do not use <assessmentTest> or <assessmentSection> elements.
+        - Include "<choiceInteraction>" for multiple-choice, "<extendedTextInteraction>" for short and long answers.
         - Ensure "<responseDeclaration>", "<itemBody>", and "<responseProcessing>" are correctly structured.
 
         Be concise but detailed. Always follow QTI 2.2 standards.
@@ -34,7 +39,7 @@ function createUserPrompt(masterPrompt: string, questions: Array<{ prompt: strin
 
         In the manifest file, replace "*file*" with a unique identifier and "*file.xml*" with the name of the XML file.
         Each question generated will be contained in a separate XML file. 
-        Mark the file name with a unique identifier and separate the questions with a line break and a unique identifier ("NEW - 2").
+        Mark the file name with a unique identifier and separate the questions with a line break and a unique identifier ("---").
 
         Generate a QTI 2.2 quiz with the following questions:
         ${questions.map((qd, index) => `Question number: ${index + 1}. ${qd.type} question on ${qd.prompt} with a diffuculty of ${qd.difficulty} out of 3.`).join("\n")}
@@ -72,10 +77,26 @@ export async function generateQuiz(masterPrompt: string, questionData: Array<{ p
             store: false,
         });
 
+        const rawResponse = response.choices[0]?.message?.content || "";
+
+        const parsedResponse = parseAiResponse(rawResponse);
+
+        const quizId = uuidv4();
+
+        const baseDier = path.join(process.cwd(), "quizzes");
+
+        const fileResult = await writeQuizFiles(parsedResponse, baseDier, quizId);
+
         //return the raw response from the API
-        return response.choices[0]?.message?.content || "";
+        return {
+            rawResponse,
+            manifestPath: fileResult.manifestPath,
+            questionPaths: fileResult.questionPaths,
+            quizId,
+            quizDirectory: fileResult.quizDirectory
+        };
     } catch (error) {
         console.error(error);
-        return `quiz generation error: ${error}. \n\n Check ./backend/src/utils/generateQuiz.ts for context.`;
+        throw new Error(`quiz generation error: ${error}. \n\n Check ./backend/src/utils/generateQuiz.ts for context.`);
     }
 }

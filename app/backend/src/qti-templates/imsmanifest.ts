@@ -1,4 +1,4 @@
-export const manifest = async () => {
+export const manifest = () => {
     return `
         <?xml version="1.0" encoding="UTF-8"?>
         <manifest xmlns="http://www.imsglobal.org/xsd/imscp_v1p1"
@@ -15,8 +15,11 @@ export const manifest = async () => {
             </metadata>
             <organizations/>
             <resources>
-                <resource identifier="*file*" type="imsqti_item_xmlv2p2" href="*file.xml*">
-                    <file href="*file.xml*"/>
+                <resource identifier="*q1*" type="imsqti_item_xmlv2p2" href="*q1.xml*">
+                    <file href="*q1.xml*"/>
+                </resource>
+                <resource identifier="*q2*" type="imsqti_item_xmlv2p2" href="*q2.xml*">
+                    <file href="*q2.xml*"/>
                 </resource>
             </resources>
         </manifest>`;
