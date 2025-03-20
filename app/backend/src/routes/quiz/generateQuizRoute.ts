@@ -42,8 +42,8 @@ router.post('/generateQuiz', async (req: Request, res: Response) => {
         // Implement quiz generation logic here
         const responseXML = await generateQuiz(userId, masterPrompt, questions);
         console.log(responseXML);
-
-        res.status(200).json({ message: 'Quiz generated successfully.' });
+        const quizId = responseXML.quizId;
+        res.status(200).json({ quizId, message: 'Quiz generated successfully.' });
         return;
     } catch (error) {
         res.status(500).json({ message: 'Internal server error in the /generateQuiz API route.' });

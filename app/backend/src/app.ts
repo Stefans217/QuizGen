@@ -6,6 +6,7 @@ import uploadUser from './routes/registration/uploadUser';
 import verifyLogin from './routes/login/verifyLogin';
 import fetchUserData from './routes/user/fetchUserData';
 import generateQuiz from './routes/quiz/generateQuizRoute';
+import serveQuiz from './routes/quiz/serveQuizRoute';
 
 const app: Application = express();
 const port: number = 3001;
@@ -23,10 +24,7 @@ app.use('/api/registration', uploadUser);
 app.use('/api/login', verifyLogin);
 app.use('/api/user', fetchUserData);
 app.use('/api/quiz', generateQuiz);
-
-app.get('/', (req: Request, res: Response) => {
-  res.send('Hello World with TypeScript!');
-});
+app.use('/api/quiz', serveQuiz);
 
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
