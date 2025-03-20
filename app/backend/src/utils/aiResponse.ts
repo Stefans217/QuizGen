@@ -1,14 +1,14 @@
-import OpenAI from 'openai';
-import path from 'path';
-import { v4 as uuidv4 } from 'uuid';
-import { manifest } from '../qti-templates/imsmanifest';
-import { choiceInteraction } from '../qti-templates/choiceInteraction';
-import { extendedTextInteraction } from '../qti-templates/extendedText';
-import { parseAiResponse } from '../utils/responseParser';
-import { writeQuizFiles, zipQuizFiles } from '../utils/fileWriter';
+import OpenAI from "openai";
+import path from "path";
+import { v4 as uuidv4 } from "uuid";
+import { manifest } from "../qti-templates/imsmanifest";
+import { choiceInteraction } from "../qti-templates/choiceInteraction";
+import { extendedTextInteraction } from "../qti-templates/extendedText";
+import { parseAiResponse } from "../utils/responseParser";
+import { writeQuizFiles, zipQuizFiles, storeQuizFilesInDB, createQuiz } from "../utils/fileWriter";
+import { create } from "domain";
 
-
-function createSystemPrompt(){
+function createSystemPrompt() {
     return `
         You are an AI assistant that generates QTI 2.2-compatible quiz questions. You follow the IMS QTI 2.2 standard and structure XML output correctly.
 
@@ -27,7 +27,7 @@ function createSystemPrompt(){
     `;
 }
 
-function createUserPrompt(masterPrompt: string, questions: Array<{ prompt: string, type: string, difficulty: number }>) {
+function createUserPrompt(masterPrompt: string, questions: Array<{ prompt: string; type: string; difficulty: number }>) {
     return `
         Based on this user prompt: ${masterPrompt}
 
@@ -47,12 +47,11 @@ function createUserPrompt(masterPrompt: string, questions: Array<{ prompt: strin
         ${questions.map((qd, index) => `Question number: ${index + 1}. ${qd.type} question on ${qd.prompt} with a diffuculty of ${qd.difficulty} out of 3.`).join("\n")}
 
         Validate the XML structure before responding.
-    `
+    `;
 }
 
-export async function generateQuiz(masterPrompt: string, questionData: Array<{ prompt: string, type: string, difficulty: number }>) {
+export async function generateQuiz(userId: number, masterPrompt: string, questionData: Array<{ prompt: string; type: string; difficulty: number }>) {
     try {
-
         console.log(questionData);
 
         const systemPrompt = createSystemPrompt();
@@ -68,8 +67,8 @@ export async function generateQuiz(masterPrompt: string, questionData: Array<{ p
 
         //verify that the messages are correctly formatted
         const typedMessages = messages.map((m) => ({
-            role: m.role as 'system' | 'user' | 'assistant',
-            content: m.content
+            role: m.role as "system" | "user" | "assistant",
+            content: m.content,
         }));
 
         //send the messages to the OpenAI API
@@ -80,16 +79,27 @@ export async function generateQuiz(masterPrompt: string, questionData: Array<{ p
         });
 
         const rawResponse = response.choices[0]?.message?.content || "";
+        console.log("rawResponse:", rawResponse);
 
         const parsedResponse = parseAiResponse(rawResponse);
+        console.log("parsedResponse:", parsedResponse);
 
         const quizId = uuidv4();
+        console.log("quizId:", quizId);
 
         const baseDir = path.join(process.cwd(), "quizzes");
+        console.log("baseDir:", baseDir);
 
         const fileResult = await writeQuizFiles(parsedResponse, baseDir, quizId);
+        console.log("fileResult:", fileResult);
 
         const zipPath = await zipQuizFiles(fileResult);
+        console.log("zipPath:", zipPath);
+
+        await createQuiz(quizId, userId, "Still need to implement quiz name");
+
+        storeQuizFilesInDB(quizId, parsedResponse, zipPath);
+        console.log("storeQuizFilesInDB called for quizId:", quizId);
 
         //return the raw response from the API
         return {
@@ -98,7 +108,7 @@ export async function generateQuiz(masterPrompt: string, questionData: Array<{ p
             questionPaths: fileResult.questionPaths,
             quizId,
             quizDirectory: fileResult.quizDirectory,
-            zipPath
+            zipPath,
         };
     } catch (error) {
         console.error(error);

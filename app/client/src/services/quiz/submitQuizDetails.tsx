@@ -6,6 +6,7 @@ export async function submitQuizDetails(userId: string, masterPrompt: string, nu
 
     console.log(userId, masterPrompt, numQuestions, questions);
     const response = await axios.post("http://localhost:3001/api/quiz/generateQuiz", {
+      userId,
       masterPrompt,
       numQuestions,
       questions

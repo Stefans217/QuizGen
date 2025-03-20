@@ -2,12 +2,49 @@ import fs from 'fs';
 import path from 'path';
 import archiver from 'archiver';
 import { ParsedResponse } from './responseParser';
-
+import prisma from "../client";
+import { v4 as uuidv4 } from "uuid";
 export interface FileWriteResult {
   manifestPath: string;
   questionPaths: string[];
   quizDirectory: string;
 }
+
+
+export async function createQuiz(quizId: string, userId: number, quizName: string) {
+  return await prisma.quiz.create({
+    data: {
+      id: quizId,
+      user: { connect: { id: userId } },
+      name: quizName,
+    },
+  });
+}
+
+/**
+ * Stores quiz files into the database.
+ *
+ * @param quizId A unique identifier for the quiz.
+ * @param parsedResponse The parsed quiz content.
+ * @param zipFilePath The path to the zip file containing quiz files.
+ */
+export async function storeQuizFilesInDB(
+  quizId: string,
+  parsedResponse: ParsedResponse,
+  zipFilePath: string
+): Promise<void> {
+
+  // Read zip file as binary data
+  const zipData: Buffer = await fs.promises.readFile(zipFilePath);
+  
+  // Store the zip file in QuizFile
+  await prisma.quizFile.upsert({
+    where: { quizId },
+    update: { zipData },
+    create: { quizId, zipData },
+  });
+}
+
 
 /**
  * Creates a zip file of the manifest and questions in the same directory.

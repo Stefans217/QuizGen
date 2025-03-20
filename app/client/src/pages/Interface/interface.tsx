@@ -24,7 +24,7 @@ const Home: React.FC = () => {
   useEffect(() => {
     fetchUserData(localStorage.getItem('token') || "")
       .then(userData => {
-        setUserId(userData.id);
+        setUserId(userData.userId);
       })
       .catch(err => console.error("Failed to fetch user data:", err));
   }, []);
@@ -51,6 +51,7 @@ const Home: React.FC = () => {
   }
 
   function handleSubmit(){
+    console.log('userid', userId);
     submitQuizDetails(userId, masterPrompt, numQuestions, questions);
     return;
   }

@@ -5,7 +5,7 @@ import bodyParser from 'body-parser';
 import uploadUser from './routes/registration/uploadUser';
 import verifyLogin from './routes/login/verifyLogin';
 import fetchUserData from './routes/user/fetchUserData';
-import generateQuiz from './routes/quiz/generateQuizEntry';
+import generateQuiz from './routes/quiz/generateQuizRoute';
 
 const app: Application = express();
 const port: number = 3001;

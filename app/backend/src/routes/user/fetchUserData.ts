@@ -21,11 +21,11 @@ router.get('/data', async (req: Request, res: Response) => {
 
     try {
         const secret = process.env.JWT_SECRET || 'your_secret_key';
-        const decoded = jwt.verify(token, secret) as { userId: string };
-        const userId = parseInt(decoded.userId, 10);
+        const decoded = jwt.verify(token, secret) as { id: string };
+        const userId = parseInt(decoded.id, 10);
 
         const user = await prisma.user.findUnique({
-            where: { id: userId }
+            where: { id: userId },
         });
 
         if (!user) {
@@ -38,8 +38,8 @@ router.get('/data', async (req: Request, res: Response) => {
             userId: userId, 
             email: user.email,
         });
-    } catch {
-        res.status(403).json({ message: 'Invalid token' });
+    } catch (error) {
+        res.status(403).json({ message: error });
         return;
     }
 });
