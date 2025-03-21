@@ -21,7 +21,7 @@ router.post('/serve-quiz', async (req: Request, res: Response) => {
       res.status(404).json({ error: 'Quiz file not found' });
       return;
     }
-
+    console.log(quizFile);
     // Set response headers to serve a zip file download
     res.setHeader('Content-Type', 'application/zip');
     res.setHeader('Content-Disposition', 'attachment; filename=quizFiles.zip');

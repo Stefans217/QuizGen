@@ -13,13 +13,16 @@ import { Label } from "@/components/ui/label"
 import { Upload } from "lucide-react"
 import { submitQuizDetails } from '@/services/quiz/submitQuizDetails';
 import { Question } from '@/types/question';
-
+import { fetchGenerateQuiz } from '@/services/quiz/fetchGeneratedQuiz';
 
 const Home: React.FC = () => {
   const [masterPrompt, setMasterPrompt] = useState("")
   const [numQuestions, setNumQuestions] = useState(0)
   const [questions, setQuestions] = useState<Question[]>([])
   const [userId, setUserId] = useState("")
+  const [quizReady, setQuizReady] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [quizId, setQuizId] = useState("");
 
   useEffect(() => {
     fetchUserData(localStorage.getItem('token') || "")
@@ -50,13 +53,31 @@ const Home: React.FC = () => {
     }
   }
 
-  function handleSubmit(){
-    console.log('userid', userId);
-    submitQuizDetails(userId, masterPrompt, numQuestions, questions);
-    return;
+  async function handleSubmit(){
+    setIsSubmitting(true);
+    try{
+      const response = await submitQuizDetails(userId, masterPrompt, numQuestions, questions);
+      setQuizId(response.quizId);
+      setQuizReady(true);
+    }catch(error){
+      console.error("Failed to submit quiz details:", error);
+    }
+    
+    setIsSubmitting(false);
   }
 
-
+  const handleDownloadQuiz = async () => {
+    try {
+      // Adjust quizId if needed. Using userId as sample quiz identifier here.
+      if (!quizId) {
+        console.error("No quiz ID found.");
+        return;
+      }
+      await fetchGenerateQuiz(quizId);
+    } catch (error) {
+      console.error("Error downloading quiz:", error);
+    }
+  };
 
   return (
     <div className="container mx-auto py-8 px-4 max-w-4xl">
@@ -151,6 +172,11 @@ const Home: React.FC = () => {
 
       <div className="mt-8 flex justify-center">
         <Button className="px-8" variant="default" onClick={handleSubmit}>Generate Quiz</Button>
+        {quizReady && (
+          <Button className="px-8" variant="outline" onClick={handleDownloadQuiz}>
+            Download Quiz
+          </Button>
+        )}
       </div>
     </div>
   )
