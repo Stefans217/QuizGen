@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Label } from "@/components/ui/label"
-import { Upload, Plus } from "lucide-react"
+import { Upload, Plus, Trash } from "lucide-react"
 import { submitQuizDetails } from '@/services/quiz/submitQuizDetails';
 import { Question } from '@/types/question';
 import { fetchGenerateQuiz } from '@/services/quiz/fetchGeneratedQuiz';
@@ -36,27 +36,16 @@ const Home: React.FC = () => {
     setQuestions(questions.map((q) => (q.id === id ? { ...q, [field]: value } : q)))
   }
 
-  const handleNumQuestionsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const num = Number.parseInt(e.target.value) || 0
-
-    setNumQuestions(num)
-
-    // Add or remove questions based on the new number
-    if (num > questions.length) {
-      const newQuestions = [...questions]
-      for (let i = questions.length + 1; i <= num; i++) {
-        newQuestions.push({ id: i, type: "", prompt: "", difficulty: 3 })
-      }
-      setQuestions(newQuestions)
-    } else if (num < questions.length) {
-      setQuestions(questions.slice(0, num))
-    }
-  }
-
   const handleAddQuestion = () => {
     const newId = questions.length + 1;
     setQuestions([...questions, { id: newId, type: "", prompt: "", difficulty: 3 }]);
     setNumQuestions(prev => prev + 1);
+  }
+
+  const handleDeleteQuestion = (id: number) => {
+    const updatedQuestions = questions.filter((q) => q.id !== id);
+    setQuestions(updatedQuestions);
+    setNumQuestions(updatedQuestions.length);
   }
 
   async function handleSubmit(){
@@ -120,25 +109,7 @@ const Home: React.FC = () => {
         </div>
       </div>
 
-      {/* Number of questions */}
-      <div className="mb-8">
-        <div className="flex flex-col items-center gap-2">
-          <h2 className="text-lg font-medium">Number of Questions</h2>
-          <div className="w-32 text-center">
-            <Input
-              type="number"
-              min="1"
-              max="20"
-              value={numQuestions}
-              onChange={handleNumQuestionsChange}
-            />
-          </div>
-          <Button variant="default" onClick={handleAddQuestion}>
-            <Plus className="mr-2 h-5 w-5" />
-            Add Question
-          </Button>
-        </div>
-      </div>
+ 
 
       <h1 className="text-2xl font-bold text-center mb-6">Tune Your Quiz Below</h1>
       <div className="h-1 bg-blue-500 mb-8"></div>
@@ -172,6 +143,9 @@ const Home: React.FC = () => {
                   />
                 </div>
               </div>
+              <Button variant="ghost" onClick={() => handleDeleteQuestion(question.id)}>
+                  <Trash className="h-5 w-5 text-red-500" />
+              </Button>
             </div>
             <div className="flex items-center gap-4 mt-4">
               <Label className="w-16 text-right">Difficulty</Label>
@@ -188,6 +162,18 @@ const Home: React.FC = () => {
             </div>
           </div>
         ))}
+      </div>
+
+     {/* Number of questions */}
+      <div className="mt-8">
+        <div className="flex flex-col items-center gap-2">
+          <Button 
+              onClick={handleAddQuestion}
+              className="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center hover:bg-blue-600"
+          >
+              <Plus className="h-5 w-5 text-white" />
+          </Button>
+        </div>
       </div>
 
       
