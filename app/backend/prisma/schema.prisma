@@ -13,4 +13,30 @@ model User {
   email    String @unique
   password String
   createdAt DateTime @default(now())
+  quizzes  Quiz[]
+}
+
+model Quiz {
+  id        String   @id @default(uuid())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    Int
+  name      String
+  createdAt DateTime @default(now())
+
+  quizData  QuizData?
+  quizFile  QuizFile?
+}
+
+model QuizData {
+  quizId    String @id @map("quiz_id")
+  quiz      Quiz   @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  manifest  Json
+  questions Json
+}
+
+model QuizFile {
+  quizId    String  @id @map("quiz_id")
+  quiz      Quiz    @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  zipData   Bytes
+  uploadedAt DateTime @default(now())
 }

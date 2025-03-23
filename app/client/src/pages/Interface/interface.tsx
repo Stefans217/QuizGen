@@ -1,7 +1,8 @@
 "use client"
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import './interface.css';
+import { fetchUserData } from '@/services/user/userService';
 import { Textarea } from "@/components/ui/textarea";
 import { useState } from "react"
 import { Slider } from "@/components/ui/slider"
@@ -10,24 +11,26 @@ import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Label } from "@/components/ui/label"
 import { Upload } from "lucide-react"
-
-interface Question {
-  id: number
-  type: string
-  prompt: string
-  difficulty: number
-}
-
-
+import { submitQuizDetails } from '@/services/quiz/submitQuizDetails';
+import { Question } from '@/types/question';
+import { fetchGenerateQuiz } from '@/services/quiz/fetchGeneratedQuiz';
 
 const Home: React.FC = () => {
   const [masterPrompt, setMasterPrompt] = useState("")
-  const [numQuestions, setNumQuestions] = useState(3)
-  const [questions, setQuestions] = useState<Question[]>([
-    { id: 1, type: "", prompt: "", difficulty: 50 },
-    { id: 2, type: "", prompt: "", difficulty: 50 },
-    { id: 3, type: "", prompt: "", difficulty: 50 },
-  ])
+  const [numQuestions, setNumQuestions] = useState(0)
+  const [questions, setQuestions] = useState<Question[]>([])
+  const [userId, setUserId] = useState("")
+  const [quizReady, setQuizReady] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [quizId, setQuizId] = useState("");
+
+  useEffect(() => {
+    fetchUserData(localStorage.getItem('token') || "")
+      .then(userData => {
+        setUserId(userData.userId);
+      })
+      .catch(err => console.error("Failed to fetch user data:", err));
+  }, []);
 
   const handleQuestionChange = (id: number, field: keyof Question, value: string | number) => {
     setQuestions(questions.map((q) => (q.id === id ? { ...q, [field]: value } : q)))
@@ -35,13 +38,14 @@ const Home: React.FC = () => {
 
   const handleNumQuestionsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const num = Number.parseInt(e.target.value) || 0
+
     setNumQuestions(num)
 
     // Add or remove questions based on the new number
     if (num > questions.length) {
       const newQuestions = [...questions]
       for (let i = questions.length + 1; i <= num; i++) {
-        newQuestions.push({ id: i, type: "", prompt: "", difficulty: 50 })
+        newQuestions.push({ id: i, type: "", prompt: "", difficulty: 3 })
       }
       setQuestions(newQuestions)
     } else if (num < questions.length) {
@@ -49,10 +53,31 @@ const Home: React.FC = () => {
     }
   }
 
-  function handleSubmit(){
-    console.log("form submitted");
-    return;
+  async function handleSubmit(){
+    setIsSubmitting(true);
+    try{
+      const response = await submitQuizDetails(userId, masterPrompt, numQuestions, questions);
+      setQuizId(response.quizId);
+      setQuizReady(true);
+    }catch(error){
+      console.error("Failed to submit quiz details:", error);
+    }
+    
+    setIsSubmitting(false);
   }
+
+  const handleDownloadQuiz = async () => {
+    try {
+      // Adjust quizId if needed. Using userId as sample quiz identifier here.
+      if (!quizId) {
+        console.error("No quiz ID found.");
+        return;
+      }
+      await fetchGenerateQuiz(quizId);
+    } catch (error) {
+      console.error("Error downloading quiz:", error);
+    }
+  };
 
   return (
     <div className="container mx-auto py-8 px-4 max-w-4xl">
@@ -147,6 +172,11 @@ const Home: React.FC = () => {
 
       <div className="mt-8 flex justify-center">
         <Button className="px-8" variant="default" onClick={handleSubmit}>Generate Quiz</Button>
+        {quizReady && (
+          <Button className="px-8" variant="outline" onClick={handleDownloadQuiz}>
+            Download Quiz
+          </Button>
+        )}
       </div>
     </div>
   )

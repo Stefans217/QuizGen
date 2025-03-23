@@ -4,10 +4,15 @@
     "module": "Node16",
     "rootDir": "./src",
     "outDir": "./dist",
+    "baseUrl": ".",
     "strict": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "paths": {
+      "@/*": ["./src/*"],
+      "@/utils": ["./src/utils"],
+    }
   },
   "include": [
     "src/**/*",
