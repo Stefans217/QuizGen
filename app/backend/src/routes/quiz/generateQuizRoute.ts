@@ -26,9 +26,8 @@ const router = express.Router();
 
 router.post('/generateQuiz', async (req: Request, res: Response) => {
     try {
-        console.log("received request")
+        console.log("received request");
         const { userId, masterPrompt, numQuestions, questions } = req.body;
-
 
         if(!userId) {
             res.status(400).json({ message: 'User ID is required.' });
@@ -46,6 +45,7 @@ router.post('/generateQuiz', async (req: Request, res: Response) => {
         res.status(200).json({ quizId, message: 'Quiz generated successfully.' });
         return;
     } catch (error) {
+        console.error(error);
         res.status(500).json({ message: 'Internal server error in the /generateQuiz API route.' });
         return;
     }

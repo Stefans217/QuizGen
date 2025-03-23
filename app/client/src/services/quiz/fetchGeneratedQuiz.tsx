@@ -8,8 +8,7 @@ export async function fetchGenerateQuiz(quizId: string) {
       { responseType: 'blob'}
     );
     console.log(response);
-    const blob = new Blob([response.data], { type: 'application/zip' });
-    FileSaver.saveAs(blob, 'quizFiles.zip');
+    FileSaver.saveAs(response.data, 'quizFiles.zip');
     return response.data;
   } catch (error) {
     console.error(error);

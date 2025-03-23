@@ -22,12 +22,14 @@ router.post('/serve-quiz', async (req: Request, res: Response) => {
       return;
     }
     console.log(quizFile);
+
+    const zipBuffer = Buffer.from(quizFile.zipData as any);
     // Set response headers to serve a zip file download
     res.setHeader('Content-Type', 'application/zip');
     res.setHeader('Content-Disposition', 'attachment; filename=quizFiles.zip');
     
     // Send the binary zip data
-    res.status(200).send(quizFile.zipData);
+    res.status(200).send(zipBuffer);
   } catch (error) {
     console.error('Error serving quiz file:', error);
     res.status(500).json({ error: 'Internal server error' });
