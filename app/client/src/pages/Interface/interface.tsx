@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Label } from "@/components/ui/label"
-import { Upload } from "lucide-react"
+import { Upload, Plus } from "lucide-react"
 import { submitQuizDetails } from '@/services/quiz/submitQuizDetails';
 import { Question } from '@/types/question';
 import { fetchGenerateQuiz } from '@/services/quiz/fetchGeneratedQuiz';
@@ -53,6 +53,12 @@ const Home: React.FC = () => {
     }
   }
 
+  const handleAddQuestion = () => {
+    const newId = questions.length + 1;
+    setQuestions([...questions, { id: newId, type: "", prompt: "", difficulty: 3 }]);
+    setNumQuestions(prev => prev + 1);
+  }
+
   async function handleSubmit(){
     setIsSubmitting(true);
     try{
@@ -68,7 +74,6 @@ const Home: React.FC = () => {
 
   const handleDownloadQuiz = async () => {
     try {
-      // Adjust quizId if needed. Using userId as sample quiz identifier here.
       if (!quizId) {
         console.error("No quiz ID found.");
         return;
@@ -79,8 +84,18 @@ const Home: React.FC = () => {
     }
   };
 
+  const handleResetQuiz = () => {
+    setMasterPrompt("");
+    setNumQuestions(0);
+    setQuestions([]);
+    setQuizId("");
+    setQuizReady(false);
+  };
+
   return (
     <div className="container mx-auto py-8 px-4 max-w-4xl">
+
+      {/* Master prompt and PDF upload */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
         <div className="space-y-2">
           <h2 className="text-lg font-medium">Master Prompt</h2>
@@ -105,6 +120,7 @@ const Home: React.FC = () => {
         </div>
       </div>
 
+      {/* Number of questions */}
       <div className="mb-8">
         <div className="flex flex-col items-center gap-2">
           <h2 className="text-lg font-medium">Number of Questions</h2>
@@ -117,13 +133,17 @@ const Home: React.FC = () => {
               onChange={handleNumQuestionsChange}
             />
           </div>
+          <Button variant="default" onClick={handleAddQuestion}>
+            <Plus className="mr-2 h-5 w-5" />
+            Add Question
+          </Button>
         </div>
       </div>
 
       <h1 className="text-2xl font-bold text-center mb-6">Tune Your Quiz Below</h1>
-
       <div className="h-1 bg-blue-500 mb-8"></div>
 
+      {/* Question generator */}
       <div className="space-y-8">
         {questions.map((question) => (
           <div key={question.id} className="border-b pb-8">
@@ -170,12 +190,45 @@ const Home: React.FC = () => {
         ))}
       </div>
 
-      <div className="mt-8 flex justify-center">
-        <Button className="px-8" variant="default" onClick={handleSubmit}>Generate Quiz</Button>
-        {quizReady && (
-          <Button className="px-8" variant="outline" onClick={handleDownloadQuiz}>
-            Download Quiz
+      
+      {/* Action buttons */}
+      <div className="mt-8 flex flex-col items-center gap-4">
+        {!quizReady && numQuestions > 0 && (
+          !isSubmitting ? (
+          <Button className="px-8" variant="default" onClick={handleSubmit}>
+            Generate Quiz
           </Button>
+        ) : (
+          <Button className="px-8" variant="default" disabled>
+            <svg className="animate-spin mr-2 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
+            </svg>
+            Generating Quiz...
+          </Button>
+          )
+        )}
+        {quizReady && (
+          <>
+            <div className="flex gap-4 w-full justify-center">
+              <Button className="w-1/5 px-8" variant="outline" onClick={handleDownloadQuiz}>
+                Download Quiz
+              </Button>
+              <Button className="w-1/5 px-8" variant="secondary" onClick={handleResetQuiz}>
+                Generate Another Quiz
+              </Button>
+            </div>      
+            <span className="flex items-center w-full my-2">
+              <div className="flex-grow border-t border-gray-300"></div>
+              <span className="mx-2 text-gray-800 text-sm text-center">OR</span>
+              <div className="flex-grow border-t border-gray-300"></div>
+            </span>
+            <div className="w-1/5 mb-4">
+              <Button className="w-full px-8" variant="default" onClick={handleSubmit}>
+                Re-Generate Quiz
+              </Button>
+            </div>
+          </>
         )}
       </div>
     </div>
