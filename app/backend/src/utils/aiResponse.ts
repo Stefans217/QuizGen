@@ -19,7 +19,8 @@ function createSystemPrompt() {
         - Validate XML structure before responding.
 
         Format:
-        - Provide only "<assessmentItem>" elements. Do not use <assessmentTest> or <assessmentSection> elements.
+        - One manifest file (imsmanifest.xml) and multiple question files (q1.xml, q2.xml, etc.).
+        - Provide only "<assessmentItem>" elements in the question files. Do not use <assessmentTest> or <assessmentSection> elements.
         - Include "<choiceInteraction>" for multiple-choice, "<extendedTextInteraction>" for short and long answers.
         - Ensure "<responseDeclaration>", "<itemBody>", and "<responseProcessing>" are correctly structured.
 
@@ -38,6 +39,7 @@ function createUserPrompt(masterPrompt: string, questions: Array<{ prompt: strin
         The templates include placeholders marked by astrixes for question content and response options.
 
         In the manifest file, replace "*file*" with a unique identifier and "*file.xml*" with the name of the XML file.
+        Make sure the manifest file references the correct XML files.
         For multiple-choice questions, decide how many options to include based on the question type and difficulty.
         For true or false questions, only include two options.
         Each question generated will be contained in a separate XML file. 
