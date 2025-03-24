@@ -10,10 +10,11 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Label } from "@/components/ui/label"
-import { Upload } from "lucide-react"
+import { Upload, Plus, Trash } from "lucide-react"
 import { submitQuizDetails } from '@/services/quiz/submitQuizDetails';
 import { Question } from '@/types/question';
 import { fetchGenerateQuiz } from '@/services/quiz/fetchGeneratedQuiz';
+import { toast, Toaster } from 'react-hot-toast';
 
 const Home: React.FC = () => {
   const [masterPrompt, setMasterPrompt] = useState("")
@@ -36,21 +37,16 @@ const Home: React.FC = () => {
     setQuestions(questions.map((q) => (q.id === id ? { ...q, [field]: value } : q)))
   }
 
-  const handleNumQuestionsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const num = Number.parseInt(e.target.value) || 0
+  const handleAddQuestion = () => {
+    const newId = questions.length + 1;
+    setQuestions([...questions, { id: newId, type: "", prompt: "", difficulty: 3 }]);
+    setNumQuestions(prev => prev + 1);
+  }
 
-    setNumQuestions(num)
-
-    // Add or remove questions based on the new number
-    if (num > questions.length) {
-      const newQuestions = [...questions]
-      for (let i = questions.length + 1; i <= num; i++) {
-        newQuestions.push({ id: i, type: "", prompt: "", difficulty: 3 })
-      }
-      setQuestions(newQuestions)
-    } else if (num < questions.length) {
-      setQuestions(questions.slice(0, num))
-    }
+  const handleDeleteQuestion = (id: number) => {
+    const updatedQuestions = questions.filter((q) => q.id !== id);
+    setQuestions(updatedQuestions);
+    setNumQuestions(updatedQuestions.length);
   }
 
   async function handleSubmit(){
@@ -59,8 +55,10 @@ const Home: React.FC = () => {
       const response = await submitQuizDetails(userId, masterPrompt, numQuestions, questions);
       setQuizId(response.quizId);
       setQuizReady(true);
+      toast.success("Quiz generated successfully!");
     }catch(error){
       console.error("Failed to submit quiz details:", error);
+      toast.error("Failed to generate quiz. Please try again.");
     }
     
     setIsSubmitting(false);
@@ -68,7 +66,6 @@ const Home: React.FC = () => {
 
   const handleDownloadQuiz = async () => {
     try {
-      // Adjust quizId if needed. Using userId as sample quiz identifier here.
       if (!quizId) {
         console.error("No quiz ID found.");
         return;
@@ -79,8 +76,19 @@ const Home: React.FC = () => {
     }
   };
 
+  const handleResetQuiz = () => {
+    setMasterPrompt("");
+    setNumQuestions(0);
+    setQuestions([]);
+    setQuizId("");
+    setQuizReady(false);
+  };
+
   return (
     <div className="container mx-auto py-8 px-4 max-w-4xl">
+      <Toaster position="top-center" />
+
+      {/* Master prompt and PDF upload */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
         <div className="space-y-2">
           <h2 className="text-lg font-medium">Master Prompt</h2>
@@ -105,25 +113,12 @@ const Home: React.FC = () => {
         </div>
       </div>
 
-      <div className="mb-8">
-        <div className="flex flex-col items-center gap-2">
-          <h2 className="text-lg font-medium">Number of Questions</h2>
-          <div className="w-32 text-center">
-            <Input
-              type="number"
-              min="1"
-              max="20"
-              value={numQuestions}
-              onChange={handleNumQuestionsChange}
-            />
-          </div>
-        </div>
-      </div>
+ 
 
       <h1 className="text-2xl font-bold text-center mb-6">Tune Your Quiz Below</h1>
-
       <div className="h-1 bg-blue-500 mb-8"></div>
 
+      {/* Question generator */}
       <div className="space-y-8">
         {questions.map((question) => (
           <div key={question.id} className="border-b pb-8">
@@ -152,6 +147,9 @@ const Home: React.FC = () => {
                   />
                 </div>
               </div>
+              <Button variant="ghost" onClick={() => handleDeleteQuestion(question.id)}>
+                  <Trash className="h-5 w-5 text-red-500" />
+              </Button>
             </div>
             <div className="flex items-center gap-4 mt-4">
               <Label className="w-16 text-right">Difficulty</Label>
@@ -170,12 +168,67 @@ const Home: React.FC = () => {
         ))}
       </div>
 
-      <div className="mt-8 flex justify-center">
-        <Button className="px-8" variant="default" onClick={handleSubmit}>Generate Quiz</Button>
-        {quizReady && (
-          <Button className="px-8" variant="outline" onClick={handleDownloadQuiz}>
-            Download Quiz
+     {/* Number of questions */}
+      <div className="mt-8">
+        <div className="flex flex-col items-center gap-2">
+          <Button 
+              onClick={handleAddQuestion}
+              className="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center hover:bg-blue-600"
+          >
+              <Plus className="h-5 w-5 text-white" />
           </Button>
+        </div>
+      </div>
+
+      
+      {/* Action buttons */}
+      <div className="mt-8 flex flex-col items-center gap-4">
+        {!quizReady && numQuestions > 0 && (
+          !isSubmitting ? (
+          <Button className="px-8" variant="default" onClick={handleSubmit}>
+            Generate Quiz
+          </Button>
+        ) : (
+          <Button className="px-8" variant="default" disabled>
+            <svg className="animate-spin mr-2 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
+            </svg>
+            Generating Quiz...
+          </Button>
+          )
+        )}
+        {quizReady && (
+          <>
+            <div className="flex gap-4 w-full justify-center">
+              <Button className="w-1/5 px-8" variant="outline" onClick={handleDownloadQuiz}>
+                Download Quiz
+              </Button>
+              <Button className="w-1/5 px-8" variant="secondary" onClick={handleResetQuiz}>
+                Generate Another Quiz
+              </Button>
+            </div>      
+            <span className="flex items-center w-full my-2">
+              <div className="flex-grow border-t border-gray-300"></div>
+              <span className="mx-2 text-gray-800 text-sm text-center">OR</span>
+              <div className="flex-grow border-t border-gray-300"></div>
+            </span>
+            <div className="w-1/5 mb-4">
+              {isSubmitting ? (
+                <Button className="w-full px-8" variant="default" disabled>
+                  <svg className="animate-spin mr-2 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
+                  </svg>
+                  Generating Quiz...
+                </Button>
+              ) : (
+                  <Button className="w-full px-8" variant="default" onClick={handleSubmit}>
+                    Re-Generate Quiz
+                  </Button>
+              )}
+            </div>
+          </>
         )}
       </div>
     </div>
