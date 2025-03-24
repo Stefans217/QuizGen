@@ -14,6 +14,7 @@ import { Upload, Plus, Trash } from "lucide-react"
 import { submitQuizDetails } from '@/services/quiz/submitQuizDetails';
 import { Question } from '@/types/question';
 import { fetchGenerateQuiz } from '@/services/quiz/fetchGeneratedQuiz';
+import { toast, Toaster } from 'react-hot-toast';
 
 const Home: React.FC = () => {
   const [masterPrompt, setMasterPrompt] = useState("")
@@ -54,8 +55,10 @@ const Home: React.FC = () => {
       const response = await submitQuizDetails(userId, masterPrompt, numQuestions, questions);
       setQuizId(response.quizId);
       setQuizReady(true);
+      toast.success("Quiz generated successfully!");
     }catch(error){
       console.error("Failed to submit quiz details:", error);
+      toast.error("Failed to generate quiz. Please try again.");
     }
     
     setIsSubmitting(false);
@@ -83,6 +86,7 @@ const Home: React.FC = () => {
 
   return (
     <div className="container mx-auto py-8 px-4 max-w-4xl">
+      <Toaster position="top-center" />
 
       {/* Master prompt and PDF upload */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
@@ -210,9 +214,19 @@ const Home: React.FC = () => {
               <div className="flex-grow border-t border-gray-300"></div>
             </span>
             <div className="w-1/5 mb-4">
-              <Button className="w-full px-8" variant="default" onClick={handleSubmit}>
-                Re-Generate Quiz
-              </Button>
+              {isSubmitting ? (
+                <Button className="w-full px-8" variant="default" disabled>
+                  <svg className="animate-spin mr-2 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
+                  </svg>
+                  Generating Quiz...
+                </Button>
+              ) : (
+                  <Button className="w-full px-8" variant="default" onClick={handleSubmit}>
+                    Re-Generate Quiz
+                  </Button>
+              )}
             </div>
           </>
         )}
