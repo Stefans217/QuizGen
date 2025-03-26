@@ -173,7 +173,7 @@ const Home: React.FC = () => {
 
         </div>
         <div className="space-y-2">
-          <h2 className="text-lg font-medium">Input a PDF</h2>
+          <h2 className="text-lg font-medium">Input a PDF (not implemented)</h2>
           <div className="flex items-center gap-2">
             <Button variant="outline" className="w-full">
               <Upload className="mr-2 h-4 w-4" />
@@ -217,9 +217,14 @@ const Home: React.FC = () => {
                   <div className=''>
                     <Textarea
                       placeholder="Enter your Prompt"
+                      maxLength={200}
+                      className="whitespace-pre-wrap break-words"
                       value={question.prompt}
                       onChange={(e) => handleQuestionChange(question.id, "prompt", e.target.value)}
                     />
+                    <span className="right-1 text-xs text-gray-500">
+                      {question.prompt.length}/200
+                    </span>
                     {questionError?.prompt && (
                       <p className="text-red-500 text-sm">{questionError.prompt}</p>
                     )}
@@ -231,16 +236,15 @@ const Home: React.FC = () => {
               </div>
               <div className="flex items-center gap-4 mt-4">
                 <Label className="w-16 text-right">Difficulty</Label>
-                <div className="flex-1">
-                  <Slider
-                    value={[question.difficulty]}
-                    min={1}
-                    max={3}
-                    step={1}
-                    onValueChange={(value) => handleQuestionChange(question.id, "difficulty", value[0])}
-                    className='w-[20%]'
-                  />
-                </div>
+                <Slider
+                  value={[question.difficulty]}
+                  min={1}
+                  max={3}
+                  step={1}
+                  onValueChange={(value) => handleQuestionChange(question.id, "difficulty", value[0])}
+                  className='w-[20%]'
+                />
+                <Label> {question.difficulty}/3</Label>
               </div>
             </div>
           );

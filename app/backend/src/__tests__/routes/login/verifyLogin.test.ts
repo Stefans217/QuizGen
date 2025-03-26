@@ -26,7 +26,7 @@ describe('POST /login/login', () => {
         (prismaMock.user.findUnique as jest.Mock).mockResolvedValue(null);
         const res = await request(app).post('/login/login').send({ email: 'foo@test.com', password: 'bar' });
         expect(res.status).toBe(401);
-        expect(res.body.message).toBe('Invalid credentials.');
+        expect(res.body.message).toBe('Invalid Credentials');
       });
     
       it('should return 200 and token if credentials are valid', async () => {

@@ -1,8 +1,6 @@
 import { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
-import './styles/app.css'
-
 import { AuthProvider } from "./services/auth/authContext";
 import ProtectedRoute from "./services/auth/protectedRoute";
 import Navbar from './components/Navbar/navbar';
