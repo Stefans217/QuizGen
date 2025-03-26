@@ -5,6 +5,7 @@ import './styles/app.css'
 
 import Navbar from './components/Navbar/navbar';
 import Interface from './pages/Interface/interface';
+import Landing from './pages/Landing/landing';
 import Content from './pages/Content/content';
 import RegistrationForm from './components/Registration/registration';
 import LoginForm from './components/Login/login';
@@ -34,6 +35,7 @@ function App() {
 
           <Routes>
             <Route path="/" element={<Interface />} />
+            <Route path="/landing" element={<Landing />} />
             <Route path="/content" element={<Content />}/>
           </Routes>
         </div>
