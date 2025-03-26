@@ -1,13 +1,15 @@
 import { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
-import './styles/app.css'
-
+import { AuthProvider } from "./services/auth/authContext";
+import ProtectedRoute from "./services/auth/protectedRoute";
 import Navbar from './components/Navbar/navbar';
 import Interface from './pages/Interface/interface';
-import Content from './pages/Content/content';
+import Landing from './pages/Landing/landing';
+import History from './pages/History/history';
 import RegistrationForm from './components/Registration/registration';
 import LoginForm from './components/Login/login';
+import Help from './pages/Help/help';
 
 function App() {
 
@@ -22,22 +24,25 @@ function App() {
 
   return (
     <>
-      {showRegistrationModal && <RegistrationForm closeRegistrationModal={closeRegistrationModal}/>}
-      {showRegistrationModal && <div className="backdrop" onClick={closeRegistrationModal}></div>}
-
-      {showLoginModal && <LoginForm closeLoginModal={closeLoginModal}/>}
-      {showLoginModal && <div className='backdrop' onClick={closeLoginModal}></div>}
-
-      <Router>
-        <div>
-          <Navbar openRegistrationModal={openRegistrationModal} openLoginModal={openLoginModal}/>
-
-          <Routes>
-            <Route path="/" element={<Interface />} />
-            <Route path="/content" element={<Content />}/>
-          </Routes>
-        </div>
-      </Router>
+      <AuthProvider>
+        <Router>
+          <div>
+            {showRegistrationModal && <RegistrationForm closeRegistrationModal={closeRegistrationModal}/>}
+            {showRegistrationModal && <div className="backdrop" onClick={closeRegistrationModal}></div>}
+            {showLoginModal && <LoginForm closeLoginModal={closeLoginModal}/>}
+            {showLoginModal && <div className='backdrop' onClick={closeLoginModal}></div>}
+            <Navbar openRegistrationModal={openRegistrationModal} openLoginModal={openLoginModal}/>
+            <Routes>
+              <Route path="/help" element={<Help />} />
+              <Route path="/landing" element={<Landing />} />
+              <Route element={<ProtectedRoute />}>
+                <Route path="/" element={<Interface />} />
+                <Route path="/history" element={<History />}/>
+              </Route>
+            </Routes>
+          </div>
+        </Router>
+      </AuthProvider>
     </>
   )
 }

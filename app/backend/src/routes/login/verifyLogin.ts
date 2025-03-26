@@ -31,7 +31,7 @@ router.post('/login', async (req: Request, res: Response) => {
         });
         console.log('email is unique')
         if (!user || !user.password || !(await bcrypt.compare(password, user.password))) {
-            res.status(401).json({ message: 'Invalid credentials.' });
+            res.status(401).json({ message: 'Invalid Credentials' });
             return;
         }
         console.log('password is correct')

@@ -31,6 +31,8 @@ const Navbar: React.FC<ModalProps> = ({ openRegistrationModal, openLoginModal })
         localStorage.removeItem("token");
         //navigate("/");
         setIsLoggedIn(false);
+        //reload window
+        window.location.reload();
     };
 
     return (
@@ -47,22 +49,44 @@ const Navbar: React.FC<ModalProps> = ({ openRegistrationModal, openLoginModal })
                             <Link
                                 to="/"
                                 className={`block py-2 px-3 rounded-sm md:p-0 ${
-                                    location.pathname === "/interface" ? "text-white bg-blue-700 md:bg-transparent md:text-blue-700 dark:text-white md:dark:text-blue-500" : "text-gray-900 hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                                    location.pathname === "/" ? "text-white bg-blue-700 md:bg-transparent md:text-blue-700 dark:text-white md:dark:text-blue-500" : "text-gray-900 hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
                                 }`}
-                                aria-current={location.pathname === "/interface" ? "page" : undefined}
+                                aria-current={location.pathname === "/" ? "page" : undefined}
                             >
                                 Interface
                             </Link>
                         </li>
                         <li>
                             <Link
-                                to="/content"
+                                to="/history"
                                 className={`block py-2 px-3 rounded-sm md:p-0 ${
-                                    location.pathname === "/content" ? "text-white bg-blue-700 md:bg-transparent md:text-blue-700 dark:text-white md:dark:text-blue-500" : "text-gray-900 hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                                    location.pathname === "/history" ? "text-white bg-blue-700 md:bg-transparent md:text-blue-700 dark:text-white md:dark:text-blue-500" : "text-gray-900 hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
                                 }`}
-                                aria-current={location.pathname === "/content" ? "page" : undefined}
+                                aria-current={location.pathname === "/history" ? "page" : undefined}
                             >
-                                Content
+                                History
+                            </Link>
+                        </li>
+                        <li>
+                            <Link
+                                to="/landing"
+                                className={`block py-2 px-3 rounded-sm md:p-0 ${
+                                    location.pathname === "/landing" ? "text-white bg-blue-700 md:bg-transparent md:text-blue-700 dark:text-white md:dark:text-blue-500" : "text-gray-900 hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                                }`}
+                                aria-current={location.pathname === "/landing" ? "page" : undefined}
+                            >
+                                Landing
+                            </Link>
+                        </li>
+                        <li>
+                            <Link
+                                to="/help"
+                                className={`block py-2 px-3 rounded-sm md:p-0 ${
+                                    location.pathname === "/help" ? "text-white bg-blue-700 md:bg-transparent md:text-blue-700 dark:text-white md:dark:text-blue-500" : "text-gray-900 hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                                }`}
+                                aria-current={location.pathname === "/help" ? "page" : undefined}
+                            >
+                                Help
                             </Link>
                         </li>
                         {!isLoggedIn ? (
