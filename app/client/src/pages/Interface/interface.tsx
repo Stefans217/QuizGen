@@ -16,6 +16,7 @@ import { Question } from '@/types/question';
 import { fetchGenerateQuiz } from '@/services/quiz/fetchGeneratedQuiz';
 import { toast, Toaster } from 'react-hot-toast';
 import ConfirmDeleteModal from '@/components/quiz/confirmDelete';
+import ConfirmResetModal from '@/components/quiz/confirmReset';
 
 interface QuestionErrors {
   type?: string;
@@ -38,6 +39,7 @@ const Home: React.FC = () => {
   const [formErrors, setFormErrors] = useState<FormErrors>({});
   const [questionCounter, setQuestionCounter] = useState(1);
   const [confirmDeleteModalOpen, setConfirmDeleteModalOpen] = useState(false);
+  const [confirmResetModalOpen, setConfirmResetModalOpen] = useState(false);
   const [questionToDelete, setQuestionToDelete] = useState<number | null>(null);
 
   useEffect(() => {
@@ -287,7 +289,7 @@ const Home: React.FC = () => {
               <Button className="w-1/5 px-8" variant="outline" onClick={handleDownloadQuiz}>
                 Download Quiz
               </Button>
-              <Button className="w-1/5 px-8" variant="secondary" onClick={handleResetQuiz}>
+              <Button className="w-1/5 px-8" variant="secondary" onClick={() => setConfirmResetModalOpen(true)}>
                 Generate Another Quiz
               </Button>
             </div>      
@@ -317,7 +319,6 @@ const Home: React.FC = () => {
 
       <ConfirmDeleteModal
         open={confirmDeleteModalOpen}
-        message="Are you sure you want to delete this question?"
         onCancel={() => {
           setConfirmDeleteModalOpen(false);
           setQuestionToDelete(null);
@@ -328,7 +329,17 @@ const Home: React.FC = () => {
           }
           setConfirmDeleteModalOpen(false);
           setQuestionToDelete(null);
-      }}/>
+        }}
+      />
+
+      <ConfirmResetModal
+        open={confirmResetModalOpen}
+        onCancel={() => setConfirmResetModalOpen(false)}
+        onConfirm={() => {
+          handleResetQuiz();
+          setConfirmResetModalOpen(false);
+        }}
+      />
     </div>
   )
 };

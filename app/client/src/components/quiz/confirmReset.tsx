@@ -16,7 +16,7 @@ interface ConfirmDeleteModalProps {
     onConfirm: () => void;
 }
 
-const ConfirmDeleteModal: React.FC<ConfirmDeleteModalProps> = ({
+const ConfirmResetModal: React.FC<ConfirmDeleteModalProps> = ({
     open,
     onCancel,
     onConfirm,
@@ -31,18 +31,18 @@ const ConfirmDeleteModal: React.FC<ConfirmDeleteModalProps> = ({
                 <DialogHeader className="p-3">
                     <div>
                         <DialogTitle className="text-lg mb-4">
-                        <span>Remove Question?</span>
+                        <span>Create Another Quiz?</span>
                         </DialogTitle>
                         <hr className="border-t border-gray-200 my-1" />
-                        <DialogDescription>Are you sure you want to remove this question?</DialogDescription>
+                        <DialogDescription>This action will erase the current quiz you made</DialogDescription>
                     </div>
                 </DialogHeader>
                 <div className="bg-gray-200 p-3 flex justify-end gap-2 rounded-b">
                     <Button variant="secondary" onClick={onCancel}>
-                        Keep Question
+                        Keep Current Quiz
                     </Button>
                     <Button variant="destructive" onClick={onConfirm}>
-                        Delete Question
+                        Reset Quiz
                     </Button>
                 </div>
             </DialogContent>
@@ -50,4 +50,4 @@ const ConfirmDeleteModal: React.FC<ConfirmDeleteModalProps> = ({
     );
 };
 
-export default ConfirmDeleteModal;
+export default ConfirmResetModal;
