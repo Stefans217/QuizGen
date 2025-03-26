@@ -2,8 +2,6 @@ import { createContext, useContext, useEffect, useState } from "react";
 
 interface AuthContextType {
   token: string | null;
-  login: (token: string) => void;
-  logout: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -21,16 +19,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }, [token]);
 
-  const login = (newToken: string) => {
-    setToken(newToken);
-  };
-
-  const logout = () => {
-    setToken(null);
-  };
-
   return (
-    <AuthContext.Provider value={{ token, login, logout }}>
+    <AuthContext.Provider value={{ token }}>
       {children}
     </AuthContext.Provider>
   );

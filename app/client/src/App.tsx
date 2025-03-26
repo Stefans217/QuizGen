@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 import './styles/app.css'
 
+import { AuthProvider } from "./services/auth/authContext";
+import ProtectedRoute from "./services/auth/protectedRoute";
 import Navbar from './components/Navbar/navbar';
 import Interface from './pages/Interface/interface';
 import Landing from './pages/Landing/landing';
@@ -28,18 +30,23 @@ function App() {
 
       {showLoginModal && <LoginForm closeLoginModal={closeLoginModal}/>}
       {showLoginModal && <div className='backdrop' onClick={closeLoginModal}></div>}
+      <AuthProvider>
+        <Router>
+          <div>
+            <Navbar openRegistrationModal={openRegistrationModal} openLoginModal={openLoginModal}/>
 
-      <Router>
-        <div>
-          <Navbar openRegistrationModal={openRegistrationModal} openLoginModal={openLoginModal}/>
+            <Routes>
+              
+              <Route path="/landing" element={<Landing />} />
+              <Route element={<ProtectedRoute />}>
+                <Route path="/" element={<Interface />} />
+                <Route path="/content" element={<Content />}/>
+              </Route>
 
-          <Routes>
-            <Route path="/" element={<Interface />} />
-            <Route path="/landing" element={<Landing />} />
-            <Route path="/content" element={<Content />}/>
-          </Routes>
-        </div>
-      </Router>
+            </Routes>
+          </div>
+        </Router>
+      </AuthProvider>
     </>
   )
 }

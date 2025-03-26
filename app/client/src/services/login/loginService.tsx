@@ -8,10 +8,12 @@ export const login = async (email: string, password: string) => {
         );
         localStorage.setItem("token", res.data.token);
         console.log("Login successful");
+        console.log(res.data);
         window.location.reload();
-        //navigate('/dashboard');
+        
+        return res.data;
     } catch (error) {
         console.log("Login failed:", error);
-        //alert("Invalid credentials");
+        throw error;
     }
 };

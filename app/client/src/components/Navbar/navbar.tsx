@@ -31,6 +31,8 @@ const Navbar: React.FC<ModalProps> = ({ openRegistrationModal, openLoginModal })
         localStorage.removeItem("token");
         //navigate("/");
         setIsLoggedIn(false);
+        //reload window
+        window.location.reload();
     };
 
     return (
