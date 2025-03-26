@@ -6,9 +6,10 @@ import ProtectedRoute from "./services/auth/protectedRoute";
 import Navbar from './components/Navbar/navbar';
 import Interface from './pages/Interface/interface';
 import Landing from './pages/Landing/landing';
-import Content from './pages/Content/content';
+import History from './pages/History/history';
 import RegistrationForm from './components/Registration/registration';
 import LoginForm from './components/Login/login';
+import Help from './pages/Help/help';
 
 function App() {
 
@@ -32,10 +33,11 @@ function App() {
             {showLoginModal && <div className='backdrop' onClick={closeLoginModal}></div>}
             <Navbar openRegistrationModal={openRegistrationModal} openLoginModal={openLoginModal}/>
             <Routes>
+              <Route path="/help" element={<Help />} />
               <Route path="/landing" element={<Landing />} />
               <Route element={<ProtectedRoute />}>
                 <Route path="/" element={<Interface />} />
-                <Route path="/content" element={<Content />}/>
+                <Route path="/history" element={<History />}/>
               </Route>
             </Routes>
           </div>
