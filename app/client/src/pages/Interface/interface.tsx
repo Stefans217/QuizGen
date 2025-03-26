@@ -263,6 +263,9 @@ const Home: React.FC = () => {
               <Plus className="h-5 w-5 text-white" />
           </Button>
         </div>
+        {!quizReady && numQuestions === 0 && 
+          <h2 className="text-lg font-bold text-center mb-6">Add a question to get started</h2>
+        }
       </div>
 
       
