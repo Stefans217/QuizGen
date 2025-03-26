@@ -25,24 +25,20 @@ function App() {
 
   return (
     <>
-      {showRegistrationModal && <RegistrationForm closeRegistrationModal={closeRegistrationModal}/>}
-      {showRegistrationModal && <div className="backdrop" onClick={closeRegistrationModal}></div>}
-
-      {showLoginModal && <LoginForm closeLoginModal={closeLoginModal}/>}
-      {showLoginModal && <div className='backdrop' onClick={closeLoginModal}></div>}
       <AuthProvider>
         <Router>
           <div>
+            {showRegistrationModal && <RegistrationForm closeRegistrationModal={closeRegistrationModal}/>}
+            {showRegistrationModal && <div className="backdrop" onClick={closeRegistrationModal}></div>}
+            {showLoginModal && <LoginForm closeLoginModal={closeLoginModal}/>}
+            {showLoginModal && <div className='backdrop' onClick={closeLoginModal}></div>}
             <Navbar openRegistrationModal={openRegistrationModal} openLoginModal={openLoginModal}/>
-
             <Routes>
-              
               <Route path="/landing" element={<Landing />} />
               <Route element={<ProtectedRoute />}>
                 <Route path="/" element={<Interface />} />
                 <Route path="/content" element={<Content />}/>
               </Route>
-
             </Routes>
           </div>
         </Router>

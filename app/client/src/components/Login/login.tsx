@@ -1,14 +1,10 @@
 import React, {useEffect, useRef, useState} from 'react';
-import { X } from "lucide-react";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
 import { login } from '../../services/login/loginService';
 import {
     Dialog,
     DialogContent,
     DialogHeader,
     DialogTitle,
-    DialogClose,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -23,7 +19,6 @@ const LoginForm: React.FC<Props> = ({closeLoginModal}) => {
     const [loading, setLoading] = useState(false);
     const [password, setPassword] = useState("");
     const [email, setEmail] = useState("");
-
 
     const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setPassword(e.target.value);
@@ -40,7 +35,6 @@ const LoginForm: React.FC<Props> = ({closeLoginModal}) => {
             return;
         }
 
-        // Rudimentary email format validation
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email)) {
             setError("Please enter a valid email address.");
@@ -53,14 +47,13 @@ const LoginForm: React.FC<Props> = ({closeLoginModal}) => {
 
         try {
             await login(email, password);
+            window.location.href = "/";
         } catch (error) {
             setError("Invalid credentials, please try again.");
         } finally {
             setLoading(false);
         }
-
     }
-
 
     return (
         <Dialog open onOpenChange={(open) => {

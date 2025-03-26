@@ -9,7 +9,6 @@ export const login = async (email: string, password: string) => {
         localStorage.setItem("token", res.data.token);
         console.log("Login successful");
         console.log(res.data);
-        window.location.reload();
         
         return res.data;
     } catch (error) {
