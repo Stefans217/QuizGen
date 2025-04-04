@@ -4,8 +4,8 @@ import { v4 as uuidv4 } from "uuid";
 import { manifest } from "../qti-templates/imsmanifest";
 import { choiceInteraction } from "../qti-templates/choiceInteraction";
 import { extendedTextInteraction } from "../qti-templates/extendedText";
-import { parseAiResponse } from "../utils/responseParser";
-import { writeQuizFiles, zipQuizFiles, storeQuizFilesInDB, createQuiz } from "../utils/fileWriter";
+import { parseAiResponse } from "./parseTextIntoFiles";
+import { storeQuizFilesInDB, createQuiz } from "./uploadQuiz";
 import { create } from "domain";
 
 function createSystemPrompt() {
@@ -89,28 +89,24 @@ export async function generateQuiz(userId: number, masterPrompt: string, questio
         const quizId = uuidv4();
         console.log("quizId:", quizId);
 
-        const baseDir = path.join(process.cwd(), "quizzes");
-        console.log("baseDir:", baseDir);
+        // const baseDir = path.join(process.cwd(), "quizzes");
+        // console.log("baseDir:", baseDir);
 
-        const fileResult = await writeQuizFiles(parsedResponse, baseDir, quizId);
-        console.log("fileResult:", fileResult);
+        // const fileResult = await writeQuizFiles(parsedResponse, baseDir, quizId);
+        // console.log("fileResult:", fileResult);
 
-        const zipPath = await zipQuizFiles(fileResult);
-        console.log("zipPath:", zipPath);
+        // const zipPath = await zipQuizFiles(fileResult);
+        // console.log("zipPath:", zipPath);
 
         await createQuiz(quizId, userId, "Still need to implement quiz name");
 
-        storeQuizFilesInDB(quizId, parsedResponse, zipPath);
+        storeQuizFilesInDB(quizId, parsedResponse);
         console.log("storeQuizFilesInDB called for quizId:", quizId);
 
         //return the raw response from the API
         return {
             rawResponse,
-            manifestPath: fileResult.manifestPath,
-            questionPaths: fileResult.questionPaths,
             quizId,
-            quizDirectory: fileResult.quizDirectory,
-            zipPath,
         };
     } catch (error) {
         console.error(error);
