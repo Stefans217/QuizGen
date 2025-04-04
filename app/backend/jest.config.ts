@@ -6,5 +6,6 @@ export default {
     },
     testEnvironment: "node",
     moduleFileExtensions: ["ts", "tsx", "js"],
-    setupFilesAfterEnv: ['<rootDir>/src/singleton.ts'],
+    setupFilesAfterEnv: ['./src/singleton.ts'],
+    testPathIgnorePatterns: ['/node_modules/', '/dist/']
   };
