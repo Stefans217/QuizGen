@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, { useState} from 'react';
 import { login } from '../../services/login/loginService';
 import {
     Dialog,
@@ -16,7 +16,7 @@ interface Props {
 const LoginForm: React.FC<Props> = ({closeLoginModal}) => {
 
     const [error, setError] = useState("");
-    const [loading, setLoading] = useState(false);
+    //const [loading, setLoading] = useState(false);
     const [password, setPassword] = useState("");
     const [email, setEmail] = useState("");
 
@@ -42,7 +42,7 @@ const LoginForm: React.FC<Props> = ({closeLoginModal}) => {
         }
 
         console.log("submit clicked");
-        setLoading(true);
+        //setLoading(true);
         setError("");
 
         try {
@@ -51,7 +51,7 @@ const LoginForm: React.FC<Props> = ({closeLoginModal}) => {
         } catch (error) {
             setError("Invalid credentials, please try again.");
         } finally {
-            setLoading(false);
+            //setLoading(false);
         }
     }
 
