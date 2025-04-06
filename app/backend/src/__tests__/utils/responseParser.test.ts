@@ -1,4 +1,4 @@
-import { parseAiResponse } from '../../../src/utils/responseParser';
+import { parseAiResponse } from '../../../src/utils/parseTextIntoFiles';
 
 describe('parseAiResponse', () => {
   test('should parse manifest and question when both are present', () => {
