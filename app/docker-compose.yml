@@ -1,9 +1,10 @@
 version: '3.8'
 services:   
-    backend:
+    backend_dev:
         build:
             context: ./backend
-        container_name: quizgen-server
+            dockerfile: Dockerfile.dev
+        container_name: quizgen-server-dev
         restart: always
         ports:
             - "3001:3001"
@@ -14,18 +15,48 @@ services:
         command: npx nodemon -L --config nodemon.json
         env_file:
             - ./backend/.env
+        environment:
+            NODE_ENV: development
 
-    client:
+    backend_prod:
+        build:
+            context: ./backend
+            dockerfile: Dockerfile.prod
+        container_name: quizgen-server-prod
+        restart: always
+        ports:
+            - "3001:3001"
+        working_dir: /app
+        command: npx nodemon -L --config nodemon.json
+        env_file:
+            - ./backend/.env
+        environment:
+            NODE_ENV: development
+
+    client_dev:
         build:
             context: client
-        container_name: quizgen-client
+            dockerfile: Dockerfile.dev
+        container_name: quizgen-client-dev
         ports:
             - "3000:3000"
         volumes:
             - ./client:/app
             - /app/node_modules
         environment:
+            - NODE_ENV=development
             - CHOKIDAR_USEPOLLING=true
+
+    client_prod:
+        build:
+            context: client
+            dockerfile: Dockerfile.prod
+        container_name: quizgen-client-prod
+        ports:
+            - "3000:3000"
+        environment:
+            - NODE_ENV=production
+
 volumes:
   server-node_modules:
   client-node_modules:
