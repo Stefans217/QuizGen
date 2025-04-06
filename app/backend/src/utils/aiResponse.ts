@@ -1,4 +1,4 @@
-import OpenAI from "openai";
+import openai from "../openaiClient";
 import path from "path";
 import { v4 as uuidv4 } from "uuid";
 import { manifest } from "../qti-templates/imsmanifest";
@@ -61,7 +61,7 @@ export async function generateQuiz(userId: number, masterPrompt: string, questio
 
         console.log(userPrompt);
 
-        const openai = new OpenAI();
+        
         const messages = [
             { role: "system", content: systemPrompt },
             { role: "user", content: userPrompt },
