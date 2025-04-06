@@ -1,5 +1,8 @@
 FROM node:22.3.0
 
+ENV NODE_ENV=development
+ENV PORT=3001
+
 WORKDIR /app
 
 COPY ./package.json .

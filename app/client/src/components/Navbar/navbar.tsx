@@ -2,10 +2,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 
-interface NavbarProps {
-    onRegisterClick: () => void;
-}
-
 interface ModalProps {
     openRegistrationModal: () => void;
     openLoginModal: () => void;
