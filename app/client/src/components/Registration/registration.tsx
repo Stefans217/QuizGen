@@ -5,6 +5,11 @@ import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 
+const backendUrl =
+  process.env.NODE_ENV === 'development'
+    ? 'http://localhost:3001'
+    : 'https://quizgen-production.up.railway.app';
+
 interface Props {
   closeRegistrationModal: () => void;
 }
@@ -48,7 +53,7 @@ const RegistrationForm: React.FC<Props> = ({ closeRegistrationModal }) => {
     console.log(JSON.stringify({email, username, password}));
 
     try {
-      const response = await fetch("http://localhost:3001/api/registration/userupload", {
+      const response = await fetch(`${backendUrl}/api/registration/userupload`, {
         method: "POST",
         headers: {
             'Content-Type': 'application/json',
