@@ -1,9 +1,14 @@
 import axios from 'axios';
 import FileSaver from 'file-saver';
 
+const backendUrl =
+  process.env.NODE_ENV === 'development'
+    ? 'http://localhost:3001'
+    : 'https://quizgen-production.up.railway.app';
+
 export async function fetchGenerateQuiz(quizId: string) {
   try {
-    const response = await axios.post('http://localhost:3001/api/quiz/serve-quiz',
+    const response = await axios.post(`${backendUrl}/api/quiz/serve-quiz`,
       { quizId },
       { responseType: 'blob'}
     );

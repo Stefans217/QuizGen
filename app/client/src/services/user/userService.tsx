@@ -1,8 +1,13 @@
 import axios from "axios";
 
+const backendUrl =
+  process.env.NODE_ENV === 'development'
+    ? 'http://localhost:3001'
+    : 'https://quizgen-production.up.railway.app';
+
 export async function fetchUserData(token: string) {
     try{
-        const response = await axios.get("http://localhost:3001/api/user/data", {
+        const response = await axios.get(`${backendUrl}/api/user/data`, {
             headers: {
                 Authorization: `Bearer ${token}`
             }
