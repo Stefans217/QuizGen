@@ -1,5 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
-import { X } from "lucide-react";
+import React, { useState } from "react";
 import "./registration.css";
 import { login } from "../../services/login/loginService";
 import { Input } from "@/components/ui/input";
