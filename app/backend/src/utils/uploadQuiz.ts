@@ -18,6 +18,16 @@ export async function createQuiz(quizId: string, userId: number, quizName: strin
     });
 }
 
+export async function createQuizData(quizId: string, masterPrompt: string, questions: Array<{ prompt: string; type: string; difficulty: number }>){
+    return await prisma.quizData.create({
+        data: {
+            quizId,
+            masterPrompt,
+            questions,
+        },
+    });
+}
+
 /**
  * Zips and Stores quiz files into the database.
  *

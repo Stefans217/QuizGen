@@ -7,7 +7,7 @@ export const extendedTextInteraction = () => {
 	    <responseDeclaration identifier="RESPONSE" cardinality="single" baseType="string"/>
 	    <outcomeDeclaration identifier="SCORE" cardinality="single" baseType="float" externalScored="human"/>
         <itemBody>
-                <p>*Enter Question Here*</p>
+            <p>*Enter Question Here*</p>
             <extendedTextInteraction responseIdentifier="RESPONSE" expectedLength="*enter expected length integer here*">
                 <prompt><b>*Give brief instructions here*</b></prompt>
             </extendedTextInteraction>
