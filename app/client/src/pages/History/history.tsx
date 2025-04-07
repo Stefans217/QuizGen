@@ -7,6 +7,8 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/com
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@/components/ui/table";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { fetchGenerateQuiz } from "@/services/quiz/fetchGeneratedQuiz";
+
 
 const History: React.FC = () => {
     const [userId, setUserId] = useState<number | null>(null);
@@ -31,6 +33,18 @@ const History: React.FC = () => {
         }
     }, [userId]);
 
+    const handleDownloadQuiz = async (quizId: string) => {
+        try {
+            if (!quizId) {
+                console.error("No quiz ID found.");
+                return;
+            }
+            await fetchGenerateQuiz(quizId);
+        } catch (error) {
+            console.error("Error downloading quiz:", error);
+        }
+    };
+
     return (
         <div className="min-h-screen flex flex-col items-center bg-gray-50 p-8">
             <Card className="w-full max-w-4xl">
@@ -42,8 +56,8 @@ const History: React.FC = () => {
                     <Table>
                         <TableHeader>
                             <TableRow>
-                                <TableHead>Quiz Title</TableHead>
-                                <TableHead>Date Taken</TableHead>
+                                <TableHead>MasterPrompt</TableHead>
+                                <TableHead>NumQuestions</TableHead>
                                 <TableHead>Actions</TableHead>
                             </TableRow>
                         </TableHeader>
@@ -52,14 +66,14 @@ const History: React.FC = () => {
                                 quizHistory.map((quiz, index) => (
                                     <TableRow key={index}>
                                         <TableCell>{quiz.masterPrompt}</TableCell>
-                                        <TableCell>{quiz.dateTaken}</TableCell>
+                                        <TableCell>{quiz.questions.length}</TableCell>
                                         <TableCell>
-                                            <Button onClick={() => setSelectedQuiz(quiz)} className="">
+                                            <Button onClick={() => setSelectedQuiz(quiz)} variant="default" className="">
                                                 View Questions
                                             </Button>
-                                            <a href={quiz.fileUrl} download className="text-blue-600 hover:underline ml-4">
+                                            <Button onClick={() => handleDownloadQuiz(quiz.quizId)} variant="link" className="ml-4">
                                                 Download
-                                            </a>
+                                            </Button>
                                         </TableCell>
                                     </TableRow>
                                 ))
