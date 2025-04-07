@@ -162,7 +162,7 @@ const Home: React.FC = () => {
                     <div className="space-y-2">
                         <h2 className="text-lg font-medium">Master Prompt</h2>
                         <div>
-                            <Textarea className="" placeholder="Enter general details about your quiz (ie. subject, key concepts, etc.)" value={masterPrompt} onChange={(e) => setMasterPrompt(e.target.value)} />
+                            <Textarea className="border border-gray-300 bg-white" placeholder="Enter general details about your quiz (ie. subject, key concepts, etc.)" value={masterPrompt} onChange={(e) => setMasterPrompt(e.target.value)} />
                             {formErrors.masterPrompt && <p className="text-red-500 text-sm">{formErrors.masterPrompt}</p>}
                         </div>
                     </div>
@@ -190,7 +190,7 @@ const Home: React.FC = () => {
                                     <h2 className="text-xl font-semibold w-16">Q{question.id}</h2>
                                     <div className="flex-1 space-y-4">
                                         <Select value={question.type} onValueChange={(value) => handleQuestionChange(question.id, "type", value)}>
-                                            <SelectTrigger>
+                                            <SelectTrigger className="border border-gray-300 bg-white">
                                                 <SelectValue placeholder="Select a Question Type" />
                                             </SelectTrigger>
                                             <SelectContent className="">
@@ -202,7 +202,7 @@ const Home: React.FC = () => {
                                         </Select>
                                         {questionError?.type && <p className="text-red-500 text-sm">{questionError.type}</p>}
                                         <div className="">
-                                            <Textarea placeholder="Enter your Prompt" maxLength={200} className="whitespace-pre-wrap break-words" value={question.prompt} onChange={(e) => handleQuestionChange(question.id, "prompt", e.target.value)} />
+                                            <Textarea placeholder="Enter your Prompt" maxLength={200} className="whitespace-pre-wrap break-words border border-gray-300 bg-white" value={question.prompt} onChange={(e) => handleQuestionChange(question.id, "prompt", e.target.value)} />
                                             <span className="right-1 text-xs text-gray-500">{question.prompt.length}/200</span>
                                             {questionError?.prompt && <p className="text-red-500 text-sm">{questionError.prompt}</p>}
                                         </div>
