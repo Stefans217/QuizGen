@@ -1,42 +1,40 @@
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider  = "postgresql"
-  url  	    = env("DATABASE_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model User {
-  id       Int    @id @default(autoincrement())
-  email    String @unique
-  password String
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
   createdAt DateTime @default(now())
-  quizzes  Quiz[]
+  quizzes   Quiz[]
 }
 
 model Quiz {
-  id        String   @id @default(uuid())
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id        String    @id @default(uuid())
   userId    Int
   name      String
-  createdAt DateTime @default(now())
-
+  createdAt DateTime  @default(now())
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   quizData  QuizData?
   quizFile  QuizFile?
 }
 
 model QuizData {
-  quizId    String @id @map("quiz_id")
-  quiz      Quiz   @relation(fields: [quizId], references: [id], onDelete: Cascade)
-  manifest  Json
-  questions Json
+  quizId       String @id @map("quiz_id")
+  masterPrompt Json
+  questions    Json
+  quiz         Quiz   @relation(fields: [quizId], references: [id], onDelete: Cascade)
 }
 
 model QuizFile {
-  quizId    String  @id @map("quiz_id")
-  quiz      Quiz    @relation(fields: [quizId], references: [id], onDelete: Cascade)
-  zipData   Bytes
+  quizId     String   @id @map("quiz_id")
+  zipData    Bytes
   uploadedAt DateTime @default(now())
+  quiz       Quiz     @relation(fields: [quizId], references: [id], onDelete: Cascade)
 }

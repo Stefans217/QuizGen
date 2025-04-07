@@ -73,6 +73,22 @@
     .custom-slider .shadcn-slider-track {
         background-color: black;
     }
+    .custom-scrollbar {
+        scrollbar-width: thin;
+        scrollbar-color: #888 transparent;
+      }
     
+      .custom-scrollbar::-webkit-scrollbar {
+        width: 8px;
+      }
+    
+      .custom-scrollbar::-webkit-scrollbar-track {
+        background: transparent;
+      }
+    
+      .custom-scrollbar::-webkit-scrollbar-thumb {
+        background-color: #888;
+        border-radius: 10px;
+      }
 }
 

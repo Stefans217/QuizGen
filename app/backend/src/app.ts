@@ -10,6 +10,7 @@ import verifyLogin from './routes/login/verifyLogin';
 import fetchUserData from './routes/user/fetchUserData';
 import generateQuiz from './routes/quiz/generateQuizRoute';
 import serveQuiz from './routes/quiz/serveQuizRoute';
+import serveQuizHistory from './routes/quiz/serveQuizHistoryRoute';
 
 const app: Application = express();
 //const port: number = 3001;
@@ -35,6 +36,7 @@ app.use('/api/login', verifyLogin);
 app.use('/api/user', fetchUserData);
 app.use('/api/quiz', generateQuiz);
 app.use('/api/quiz', serveQuiz);
+app.use('/api/quiz', serveQuizHistory);
 
 app.get('/', (req, res) => {
   res.send('Backend server is up and running!');
