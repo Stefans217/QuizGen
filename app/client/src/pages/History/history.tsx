@@ -5,7 +5,7 @@ import { fetchQuizHistory } from "@/services/quiz/fetchQuizHistory";
 import { Question } from "@/types/question";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@/components/ui/table";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogOverlay } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { fetchGenerateQuiz } from "@/services/quiz/fetchGeneratedQuiz";
 
