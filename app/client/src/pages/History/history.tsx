@@ -8,13 +8,14 @@ import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { fetchGenerateQuiz } from "@/services/quiz/fetchGeneratedQuiz";
-
+import QuestionListModal from "@/components/History/questionList";
 
 const History: React.FC = () => {
     const [userId, setUserId] = useState<number | null>(null);
     const [quizHistory, setQuizHistory] = useState<any[]>([]);
     const [selectedQuiz, setSelectedQuiz] = useState<any | null>(null);
     const [isLoading, setIsLoading] = useState(true);
+    const [questionListModalOpen, setQuestionListModalOpen] = useState(false);
 
     useEffect(() => {
         setIsLoading(true);
@@ -77,7 +78,10 @@ const History: React.FC = () => {
                                         <TableCell className="whitespace-normal break-words">{quiz.masterPrompt}</TableCell>
                                         <TableCell>{quiz.questions.length}</TableCell>
                                         <TableCell>
-                                            <Button onClick={() => setSelectedQuiz(quiz)} variant="default" className="">
+                                            <Button onClick={() => {
+                                                setSelectedQuiz(quiz);
+                                                setQuestionListModalOpen(true);
+                                            }} variant="default" className="">
                                                 View Questions
                                             </Button>
                                             <Button onClick={() => handleDownloadQuiz(quiz.quizId)} variant="link" className="ml-4">
@@ -100,25 +104,11 @@ const History: React.FC = () => {
            </Card>
             
             {selectedQuiz && (
-                <Dialog open={!!selectedQuiz} onOpenChange={() => setSelectedQuiz(null)}>
-                    <DialogContent className="overflow-y-auto pr-2 w-full animate-fadeIn max-h-[60vh] overflow-hidden">
-                        <DialogHeader>
-                            <DialogTitle>Quiz Questions</DialogTitle>
-                        </DialogHeader>
-                        <div className="overflow-y-auto max-h-[calc(60vh-4rem)] pr-2 custom-scrollbar">
-                        <ul className="list-disc pl-4">
-                            {selectedQuiz.questions.map((question: Question, i: number) => (
-                                <li key={i} className="mb-2">
-                                    <strong>SubPrompt:</strong> {question.prompt},  
-                                    <br />
-                                    <strong>Difficulty:</strong> {question.difficulty},
-                                    <br />
-                                    <strong>Type:</strong> {question.type}
-                                </li>
-                            ))}
-                        </ul></div>
-                    </DialogContent>
-                </Dialog>
+                <QuestionListModal
+                    open={questionListModalOpen}
+                    onClose={() => setQuestionListModalOpen(false)}
+                    questions={selectedQuiz.questions}
+                />
             )}
         </div>
     );
