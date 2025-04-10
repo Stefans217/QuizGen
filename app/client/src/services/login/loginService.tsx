@@ -7,13 +7,10 @@ const backendUrl =
 
 export const login = async (email: string, password: string) => {
     try {
-        console.log(email, password);
         const res = await axios.post(`${backendUrl}/api/login/login`, 
             { email, password }
         );
         localStorage.setItem("token", res.data.token);
-        console.log("Login successful");
-        console.log(res.data);
         
         return res.data;
     } catch (error) {

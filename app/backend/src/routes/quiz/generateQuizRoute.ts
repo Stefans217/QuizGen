@@ -26,7 +26,7 @@ const router = express.Router();
 
 router.post('/generateQuiz', async (req: Request, res: Response) => {
     try {
-        console.log("received request");
+        console.log("QUIZ GEN request received");
         const { userId, masterPrompt, numQuestions, questions } = req.body;
 
         if(!userId) {
@@ -37,10 +37,9 @@ router.post('/generateQuiz', async (req: Request, res: Response) => {
             res.status(400).json({ message: 'Master prompt, number of questions, and question data are required.' });
             return;
         }
-        console.log("inputs verified")
         // Implement quiz generation logic here
         const responseXML = await generateQuiz(userId, masterPrompt, questions);
-        console.log(responseXML);
+        console.log('Generated quiz, sending response');
         const quizId = responseXML.quizId;
         res.status(200).json({ quizId, message: 'Quiz generated successfully.' });
         return;

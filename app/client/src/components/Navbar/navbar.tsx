@@ -15,10 +15,8 @@ const Navbar: React.FC<ModalProps> = ({ openRegistrationModal, openLoginModal })
     useEffect(() => {
         const token = localStorage.getItem("token");
         if (token) {
-            console.log("User is logged in");
             setIsLoggedIn(true);
         } else {
-            console.log("User is NOT logged in");
             setIsLoggedIn(false);
         }
     }, []);

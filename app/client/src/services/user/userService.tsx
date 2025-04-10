@@ -12,7 +12,7 @@ export async function fetchUserData(token: string) {
                 Authorization: `Bearer ${token}`
             }
         });
-        console.log('response', response.data);
+        
         return response.data;
     }catch(error: any){
         throw new Error(`Failed to fetch user data. ${error.message}`);

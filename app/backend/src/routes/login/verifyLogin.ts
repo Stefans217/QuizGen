@@ -18,27 +18,22 @@ const router = express.Router();
 
 router.post('/login', async (req: Request, res: Response) => {
     try {
-        console.log('request received');
+        console.log('LOGIN request received');
         const { email, password } = req.body;
-        console.log('Request body:', { email, password });
         if (!email || !password) {
             res.status(400).json({ message: 'Email and password are required.' });
             return;
         }
-        console.log('passed email verification')
         const user = await prisma.user.findUnique({
             where: { email },
         });
-        console.log('email is unique')
         if (!user || !user.password || !(await bcrypt.compare(password, user.password))) {
             res.status(401).json({ message: 'Invalid Credentials' });
             return;
         }
-        console.log('password is correct')
         const token = jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET!, { expiresIn: '24h' });
-        console.log('token generated, sending response.', token);
+        console.log('token generated, sending response.');
         res.status(200).json({ token: token });
-
     } catch (error) {
         res.status(500).json({ message: 'Internal server error.' });
     }

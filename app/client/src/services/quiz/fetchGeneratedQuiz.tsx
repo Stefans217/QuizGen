@@ -12,7 +12,6 @@ export async function fetchGenerateQuiz(quizId: string) {
       { quizId },
       { responseType: 'blob'}
     );
-    console.log(response);
     FileSaver.saveAs(response.data, 'quizFiles.zip');
     return response.data;
   } catch (error) {
