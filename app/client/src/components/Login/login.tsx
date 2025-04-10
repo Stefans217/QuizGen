@@ -40,8 +40,6 @@ const LoginForm: React.FC<Props> = ({closeLoginModal}) => {
             setError("Please enter a valid email address.");
             return;
         }
-
-        console.log("submit clicked");
         //setLoading(true);
         setError("");
 

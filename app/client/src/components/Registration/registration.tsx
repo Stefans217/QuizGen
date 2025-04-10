@@ -50,8 +50,6 @@ const RegistrationForm: React.FC<Props> = ({ closeRegistrationModal }) => {
 
     setErrorMessage('');
 
-    console.log(JSON.stringify({email, username, password}));
-
     try {
       const response = await fetch(`${backendUrl}/api/registration/userupload`, {
         method: "POST",
@@ -62,8 +60,6 @@ const RegistrationForm: React.FC<Props> = ({ closeRegistrationModal }) => {
       });
       
       if (response.ok) {
-        console.log("User registration data submitted successfully");
-
         await login(email, password);
         window.location.href = "/";
       } else {

@@ -54,14 +54,9 @@ function createUserPrompt(masterPrompt: string, questions: Array<{ prompt: strin
 
 export async function generateQuiz(userId: number, masterPrompt: string, questionData: Array<{ prompt: string; type: string; difficulty: number }>) {
     try {
-        console.log(questionData);
-
         const systemPrompt = createSystemPrompt();
         const userPrompt = createUserPrompt(masterPrompt, questionData);
 
-        console.log(userPrompt);
-
-        
         const messages = [
             { role: "system", content: systemPrompt },
             { role: "user", content: userPrompt },
@@ -81,13 +76,10 @@ export async function generateQuiz(userId: number, masterPrompt: string, questio
         });
 
         const rawResponse = response.choices[0]?.message?.content || "";
-        console.log("rawResponse:", rawResponse);
 
         const parsedResponse = parseAiResponse(rawResponse);
-        console.log("parsedResponse:", parsedResponse);
 
         const quizId = uuidv4();
-        console.log("quizId:", quizId);
 
         await createQuiz(quizId, userId, masterPrompt);
 
@@ -95,7 +87,6 @@ export async function generateQuiz(userId: number, masterPrompt: string, questio
 
         createQuizData(quizId, masterPrompt, questionData);
 
-        //return the raw response from the API
         return {
             rawResponse,
             quizId,

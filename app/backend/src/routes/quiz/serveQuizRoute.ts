@@ -10,9 +10,9 @@ const router = express.Router();
  */
 router.post('/serve-quiz', async (req: Request, res: Response) => {
   try {
+    console.log('SERVE QUIZ request received');
     const { quizId } = req.body;
 
-    // Fetch the quiz file based on quizId
     const quizFile = await prisma.quizFile.findUnique({
       where: { quizId },
     });
@@ -21,14 +21,13 @@ router.post('/serve-quiz', async (req: Request, res: Response) => {
       res.status(404).json({ error: 'Quiz file not found' });
       return;
     }
-    console.log(quizFile);
 
     const zipBuffer = Buffer.from(quizFile.zipData as any);
-    // Set response headers to serve a zip file download
+
     res.setHeader('Content-Type', 'application/zip');
     res.setHeader('Content-Disposition', 'attachment; filename=quizFiles.zip');
-    
-    // Send the binary zip data
+
+    console.log('Served quiz file, sending response.');
     res.status(200).send(zipBuffer);
   } catch (error) {
     console.error('Error serving quiz file:', error);
