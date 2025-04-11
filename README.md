@@ -19,17 +19,20 @@ Ensure you have the following installed on your system:
    git clone <repository-url>
    ```
 
-2. **Navigate into the project directory**
+2. **Obtain .env variables**
+   - Create a .env file inside the Quizgen/app/backend directory and paste the variables in.
+   
+4. **Navigate into the project directory**
    ```sh
    cd quizgen/app/
    ```
 
-3. **Build and start the application using Docker Compose**
+5. **Build and start the application using Docker Compose**
    ```sh
    docker compose up --build -d client_dev backend_dev
    ```
 
-4. **Access the application**
+6. **Access the application**
    Open your browser and visit:
    ```
    http://localhost:3000
