@@ -26,7 +26,7 @@ Ensure you have the following installed on your system:
 
 3. **Build and start the application using Docker Compose**
    ```sh
-   docker compose up --build -d
+   docker compose up --build -d client_dev backend_dev
    ```
 
 4. **Access the application**
